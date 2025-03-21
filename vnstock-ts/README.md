@@ -1,6 +1,19 @@
 # vnstock-ts
 
-A TypeScript version of the vnstock package for Vietnamese stock market data analysis.
+A TypeScript library for fetching and analyzing stock data from the Vietnamese stock market.
+
+## Overview
+
+`vnstock-ts` is a TypeScript implementation of the popular `vnstock` Python package, designed to provide financial data access, analysis, and visualization capabilities for the Vietnamese stock market. It offers a modern TypeScript interface while maintaining feature parity with the original Python library.
+
+## Features
+
+- **Multiple Data Sources**: Access data from various Vietnamese brokers and financial platforms
+- **Financial Data**: Fetch stock prices, company information, financial statements, and more
+- **Technical Analysis**: Calculate technical indicators and perform stock analysis
+- **Data Visualization**: Create interactive charts for stock data and financial metrics
+- **TypeScript-First**: Fully typed API with comprehensive interfaces and documentation
+- **Modular Design**: Import only what you need to keep your bundle size small
 
 ## Installation
 
@@ -8,80 +21,136 @@ A TypeScript version of the vnstock package for Vietnamese stock market data ana
 npm install vnstock-ts
 ```
 
-## Features
-
-vnstock-ts provides a comprehensive set of tools for Vietnamese stock market analysis:
-
-- Historical price data for stocks, indices, futures, and more
-- Real-time price quotes
-- Company information and financials
-- Market listings and categorization
-- Stock screening capabilities
-- International market data (forex, crypto, world indices)
-- Mutual fund data
-- Exchange rates and gold prices
-
-## Basic Usage
-
-Here are some examples of how to use vnstock-ts:
+## Quick Start
 
 ```typescript
-// Import the package
-import { Vnstock, Quote, Company } from 'vnstock-ts';
+import { VNStock } from 'vnstock-ts';
 
-// Using the main interface
-const stock = new Vnstock().stock('ACB', 'VCI');
+// Create an instance
+const vnstock = new VNStock();
 
-// Get historical data
-const getHistoricalData = async () => {
-  const data = await stock.quote.history('2024-01-01', '2024-03-19', '1D');
-  console.log(data);
-};
+// Get stock price data
+async function getStockData() {
+  try {
+    const data = await vnstock.ticker.getPriceData(
+      'VNM',
+      '2023-01-01',
+      '2023-12-31'
+    );
+    console.log(data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
 
-// Get company overview
-const getCompanyOverview = async () => {
-  const data = await stock.company.overview();
-  console.log(data);
-};
-
-// Get financial ratios
-const getFinancialRatios = async () => {
-  const data = await stock.finance.ratio('year', 'vi', true);
-  console.log(data);
-};
-
-// Using specific components directly
-const quote = new Quote('ACB', 'VCI');
-const getHistory = async () => {
-  const data = await quote.history('2024-01-01', '2024-03-19', '1D');
-  console.log(data);
-};
-
-// Get company information
-const company = new Company('ACB', 'VCI');
-const getOverview = async () => {
-  const data = await company.overview();
-  console.log(data);
-};
+getStockData();
 ```
 
-## Available Data Sources
+## Data Sources
 
-The package supports the following data sources:
+The library supports multiple data sources from Vietnamese brokers and platforms:
 
-- VCI (Vietstock)
-- TCBS (Techcombank Securities)
-- MSN (For international data)
-- FMARKET (For mutual fund data)
+- VCI (VietCapital Securities)
+- TCBS (Techcom Securities)
+- MSN (Microsoft Network)
+- FMARKET (Fund Market)
+- Other misc sources
 
-## Documentation
+## API Documentation
 
-For comprehensive documentation on all available functions and their parameters, please refer to the [usage documentation](https://github.com/your-username/vnstock-ts/blob/main/docs/usage_doc.md).
+### Stock Data
+
+```typescript
+// Get historical price data
+const priceData = await vnstock.ticker.getPriceData(symbol, startDate, endDate);
+
+// Get real-time quote
+const quote = await vnstock.ticker.getQuote(symbol);
+
+// Get company information
+const companyInfo = await vnstock.company.getInfo(symbol);
+
+// Get financial statements
+const financials = await vnstock.company.getFinancials(symbol, 'quarterly');
+```
+
+### Technical Analysis
+
+```typescript
+// Calculate technical indicators
+const sma = await vnstock.analysis.sma(symbol, 14);
+const rsi = await vnstock.analysis.rsi(symbol, 14);
+
+// Get stock recommendations
+const recommendations = await vnstock.analysis.getRecommendations(symbol);
+```
+
+### Data Visualization
+
+```typescript
+// Create price chart
+const chart = await vnstock.chart.createPriceChart(symbol, startDate, endDate);
+
+// Create technical indicator chart
+const indicatorChart = await vnstock.chart.createIndicatorChart(symbol, 'rsi');
+
+// Create financial chart
+const financialChart = await vnstock.chart.createFinancialChart(
+  symbol,
+  'revenue'
+);
+```
+
+## Development
+
+### Project Structure
+
+The project follows a modular structure:
+
+```
+vnstock-ts/
+├── src/                       # Source code
+│   ├── index.ts               # Main entry point
+│   ├── explorer/              # Data source modules
+│   ├── core/                  # Core functionality
+│   ├── common/                # Common functionality
+│   ├── connector/             # API connectors
+│   └── botbuilder/            # Bot building functionality
+└── tests/                     # Test files
+```
+
+### Building from Source
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/vnstock-ts.git
+cd vnstock-ts
+
+# Install dependencies
+npm install
+
+# Build the project
+npm run build
+
+# Run tests
+npm test
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-This package is released under a custom license. Please check the LICENSE file for more details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgements
+## Acknowledgments
 
-This package is a TypeScript port of the original [vnstock](https://github.com/thinh-vu/vnstock) package by Thinh Vu.
+- This library is a TypeScript implementation of the [vnstock](https://github.com/thinh-vu/vnstock) Python package
+- Thanks to all the contributors of the original Python project
