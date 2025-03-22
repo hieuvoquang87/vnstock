@@ -1,7 +1,12 @@
 /**
  * Main Vnstock class
  */
-import { CompanyModule, ListingModule, QuoteModule } from './common/data';
+import {
+  CompanyModule,
+  FinanceModule,
+  ListingModule,
+  QuoteModule,
+} from './common/data';
 import { configure } from './core/config';
 import { DataSource, VnstockConfig } from './types/config';
 import { getLogger } from './core/utils/logger';
@@ -15,6 +20,7 @@ export class Vnstock {
   private readonly _quote: QuoteModule;
   private readonly _listing: ListingModule;
   private readonly _company: CompanyModule;
+  private readonly _finance: FinanceModule;
 
   /**
    * Constructor
@@ -32,6 +38,7 @@ export class Vnstock {
     this._quote = new QuoteModule();
     this._listing = new ListingModule();
     this._company = new CompanyModule();
+    this._finance = new FinanceModule();
   }
 
   /**
@@ -42,6 +49,7 @@ export class Vnstock {
     this._quote.setDataSource(source);
     this._listing.setDataSource(source);
     this._company.setDataSource(source);
+    this._finance.setDataSource(source);
     logger.info(`Changed data source to ${source}`);
   }
 
@@ -64,5 +72,12 @@ export class Vnstock {
    */
   public get company(): CompanyModule {
     return this._company;
+  }
+
+  /**
+   * Access to finance module for financial data
+   */
+  public get finance(): FinanceModule {
+    return this._finance;
   }
 }

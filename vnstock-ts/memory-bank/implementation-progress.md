@@ -22,34 +22,65 @@ This document tracks the progress of implementing the vnstock library in TypeScr
 | Types & Interfaces    | 100%         | Complete    |
 | Base Explorer         | 100%         | Complete    |
 | VCI Data Source       | 100%         | Complete    |
-| TCBS Data Source      | 0%           | Not Started |
-| SSI Data Source       | 0%           | Not Started |
+| TCBS Data Source      | 100%         | Complete    |
+| SSI Data Source       | 100%         | Complete    |
 | VND Data Source       | 0%           | Not Started |
 | Ticker/Listing Module | 100%         | Complete    |
 | Price/Quote Module    | 100%         | Complete    |
 | Company Module        | 100%         | Complete    |
-| Financial Module      | 0%           | Not Started |
+| Financial Module      | 100%         | Complete    |
 | Technical Analysis    | 0%           | Not Started |
 | Screener              | 0%           | Not Started |
 | News/Events           | 0%           | Not Started |
 
 ## Current Priorities
 
-1. Implement TCBS data source endpoints
-2. Create the financial data module
+1. Update Company and Finance modules with multi-data source support
+2. Implement VND data source endpoints
 3. Add unit tests for existing modules
 4. Implement technical analysis functions
+5. Create more examples
 
 ## Next Steps
 
-1. Create the `TcbsExplorer` class extending `BaseExplorer`
-2. Implement the financial data module using existing explorers
-3. Create unit tests for the core utilities
-4. Start implementing basic technical analysis functions
+1. Update Company and Finance modules to support multiple data sources
+2. Create the `VndExplorer` class extending `BaseExplorer`
+3. Implement basic technical analysis functions
+4. Create unit tests for the core utilities
+5. Add a screener module
 
 ## Technical Debt
 
 _Track any temporary implementations or areas that need refactoring here_
+
+### Implementation vs. Original Plan
+
+The current implementation differs from the original project structure plan detailed in `project-structure.md`:
+
+1. **Explorer Organization**: In the original plan, each data source explorer was to have its own directory with specialized modules (e.g., `explorer/vci/quote.ts`, `explorer/vci/company.ts`). Currently, explorers are implemented as single files in `core/explorer/`.
+
+2. **Module Location**: The original plan had `explorer/` as a top-level directory, but the current implementation has explorers in `core/explorer/`.
+
+3. **Missing Modules**: Several planned modules are not yet implemented, including:
+   - `botbuilder/`
+   - `connector/`
+   - `common/plot/`
+   - Various utility modules in `core/utils/`
+
+### Refactoring Needs
+
+Future refactoring should consider:
+
+1. Reorganizing explorer modules according to the original plan for better separation of concerns
+2. Moving `core/explorer/` to a top-level `explorer/` directory
+3. Implementing the missing modules as outlined in the original plan
+
+## Implementation Highlights
+
+- **Multi-data Source Support**: Both ListingModule and QuoteModule have been updated to support multiple data sources (VCI, TCBS, SSI) with dynamic switching capability.
+- **SSI Data Source**: Full implementation of SSI data source explorer with all core endpoints.
+- **Modular Architecture**: Consistent explorer pattern across all implemented data sources.
+- **Comprehensive Examples**: Added examples demonstrating explorer comparison, module integration, and error handling strategies.
 
 ## File Structure Implementation Status
 
@@ -59,13 +90,22 @@ Legend:
 - [🔄] In progress
 - [✅] Completed
 
-### Core Files
+### Project Files
 
-- [x] `src/index.ts` - Main entry point and exports
-- [x] `src/types/index.ts` - Type exports
-- [x] `src/types/api.ts` - API-related types
-- [x] `src/types/models.ts` - Data model types
-- [x] `src/types/config.ts` - Configuration types
+- [✅] `package.json` - Project metadata and dependencies
+- [✅] `package-lock.json` - Dependency lock file
+- [✅] `tsconfig.json` - TypeScript configuration
+- [✅] `.gitignore` - Git ignore rules
+- [✅] `README.md` - Project documentation
+
+### Source Files
+
+- [✅] `src/index.ts` - Main entry point and exports
+- [✅] `src/Vnstock.ts` - Main class
+- [✅] `src/types/index.ts` - Type exports
+- [✅] `src/types/api.ts` - API-related types
+- [✅] `src/types/models.ts` - Data model types
+- [✅] `src/types/config.ts` - Configuration types
 
 ### Core Modules
 
@@ -89,8 +129,8 @@ Legend:
 
 #### Configuration
 
-- [x] `src/core/config/index.ts` - Configuration exports
-- [x] `src/core/config/const.ts` - Configuration constants
+- [✅] `src/core/config/index.ts` - Configuration exports
+- [✅] `src/core/config/const.ts` - Configuration constants
 
 #### Converters
 
@@ -99,92 +139,47 @@ Legend:
 
 ### Explorer Modules
 
-- [ ] `src/explorer/index.ts` - Explorer module exports
-- [ ] `src/explorer/base.ts` - Base explorer class
-
-#### VCI Data Source
-
-- [ ] `src/explorer/vci/index.ts` - VCI module exports
-- [ ] `src/explorer/vci/analysis.ts` - Technical analysis
-- [ ] `src/explorer/vci/company.ts` - Company information
-- [ ] `src/explorer/vci/const.ts` - Constants
-- [ ] `src/explorer/vci/financial.ts` - Financial data
-- [ ] `src/explorer/vci/listing.ts` - Listings data
-- [ ] `src/explorer/vci/models.ts` - Data models
-- [ ] `src/explorer/vci/quote.ts` - Price quotes
-- [ ] `src/explorer/vci/trading.ts` - Trading data
-
-#### TCBS Data Source
-
-- [ ] `src/explorer/tcbs/index.ts` - TCBS module exports
-- [ ] `src/explorer/tcbs/analysis.ts` - Technical analysis
-- [ ] `src/explorer/tcbs/company.ts` - Company information
-- [ ] `src/explorer/tcbs/const.ts` - Constants
-- [ ] `src/explorer/tcbs/financial.ts` - Financial data
-- [ ] `src/explorer/tcbs/listing.ts` - Listings data
-- [ ] `src/explorer/tcbs/models.ts` - Data models
-- [ ] `src/explorer/tcbs/quote.ts` - Price quotes
-- [ ] `src/explorer/tcbs/screener.ts` - Stock screener
-- [ ] `src/explorer/tcbs/trading.ts` - Trading data
-
-#### FMARKET Data Source
-
-- [ ] `src/explorer/fmarket/index.ts` - FMARKET module exports
-- [ ] `src/explorer/fmarket/const.ts` - Constants
-- [ ] `src/explorer/fmarket/fund.ts` - Fund data
-
-#### MSN Data Source
-
-- [ ] `src/explorer/msn/index.ts` - MSN module exports
-- [ ] `src/explorer/msn/const.ts` - Constants
-- [ ] `src/explorer/msn/helper.ts` - Helper functions
-- [ ] `src/explorer/msn/listing.ts` - Listings data
-- [ ] `src/explorer/msn/models.ts` - Data models
-- [ ] `src/explorer/msn/quote.ts` - Price quotes
-
-#### Miscellaneous Data Sources
-
-- [ ] `src/explorer/misc/index.ts` - Misc module exports
-- [ ] `src/explorer/misc/exchange-rate.ts` - Exchange rate data
-- [ ] `src/explorer/misc/gold-price.ts` - Gold price data
+- [✅] `src/core/explorer/base.ts` - Base explorer class
+- [✅] `src/core/explorer/vci.ts` - VCI explorer implementation
+- [✅] `src/core/explorer/tcbs.ts` - TCBS explorer implementation
+- [✅] `src/core/explorer/ssi.ts` - SSI explorer implementation
+- [ ] `src/core/explorer/vnd.ts` - VND explorer implementation
 
 ### Common Functionality
 
-- [ ] `src/common/index.ts` - Common module exports
-- [ ] `src/common/cli.ts` - Command-line interface
-- [ ] `src/common/vnstock.ts` - Core class
+- [✅] `src/common/data/index.ts` - Data module exports
+- [✅] `src/common/data/listing.ts` - Stock listing module (multi-source)
+- [✅] `src/common/data/quote.ts` - Price quote module (multi-source)
+- [✅] `src/common/data/company.ts` - Company information module
+- [✅] `src/common/data/finance.ts` - Financial data module
 
-#### Data Handling
+### Distribution
 
-- [ ] `src/common/data/index.ts` - Data module exports
-- [ ] `src/common/data/data-explorer.ts` - Data exploration utilities
+- [✅] `dist/` - Compiled JavaScript output
 
-#### Plotting Utilities
+### Dependencies
 
-- [ ] `src/common/plot/index.ts` - Plot module exports
-- [ ] `src/common/plot/chart-wrapper.ts` - Chart plotting utilities
-
-### Connector Modules
-
-- [ ] `src/connector/dnse/index.ts` - DNSE module exports
-- [ ] `src/connector/dnse/trade.ts` - DNSE trading API integration
-
-### Bot Builder
-
-- [ ] `src/botbuilder/index.ts` - Botbuilder module exports
-- [ ] `src/botbuilder/noti.ts` - Notification functionality
+- [✅] `node_modules/` - Installed NPM packages
 
 ### Tests
 
 - [ ] `tests/explorer/` - Explorer module tests
 - [ ] `tests/core/` - Core module tests
 - [ ] `tests/common/` - Common module tests
-- [ ] `tests/connector/` - Connector module tests
-- [ ] `tests/botbuilder/` - Botbuilder module tests
 
 ### Examples
 
-- [x] `examples/basic.ts` - Basic usage example
-- [ ] `examples/stock-data.ts` - Stock data example
+- [✅] `examples/basic.ts` - Basic usage example
+- [✅] `examples/finance.ts` - Finance data example
+- [✅] `examples/ssi.ts` - SSI data source example
+- [✅] `examples/explorer-comparison.ts` - Explorer comparison example
+- [✅] `examples/module-integration.ts` - Module integration example
+- [✅] `examples/error-handling.ts` - Error handling strategies example
 - [ ] `examples/technical-analysis.ts` - Technical analysis example
-- [ ] `examples/visualization.ts` - Visualization example
+- [ ] `examples/screener.ts` - Stock screener example
+
+### Documentation
+
+- [✅] `memory-bank/implementation-progress.md` - Progress tracking
+- [✅] `memory-bank/implementation-summary.md` - Implementation summary
+- [✅] `memory-bank/core-modules.md` - Core modules documentation

@@ -7,10 +7,15 @@
 import { Vnstock } from './Vnstock';
 
 // Data modules
-import { ListingModule, QuoteModule } from './common/data';
+import {
+  CompanyModule,
+  FinanceModule,
+  ListingModule,
+  QuoteModule,
+} from './common/data';
 
 // Export data modules directly
-export { ListingModule, QuoteModule };
+export { CompanyModule, FinanceModule, ListingModule, QuoteModule };
 
 // Configuration
 export { configure } from './core/config';

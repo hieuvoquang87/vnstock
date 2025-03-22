@@ -2,6 +2,8 @@
  * Stock quote and price data module
  */
 import { VciExplorer } from '../../core/explorer/vci';
+import { TcbsExplorer } from '../../core/explorer/tcbs';
+import { SsiExplorer } from '../../core/explorer/ssi';
 import { ApiResponse, DateRangeParams } from '../../types/api';
 import { OHLCData, Quote } from '../../types/models';
 import { getLogger } from '../../core/utils/logger';
@@ -10,18 +12,36 @@ import { DataSource } from '../../types/config';
 
 const logger = getLogger('QuoteModule');
 
+// Type for supported explorers
+type SupportedExplorer = VciExplorer | TcbsExplorer | SsiExplorer;
+
 /**
  * Quote module for accessing price data
  */
 export class QuoteModule {
-  private explorer: VciExplorer;
+  private explorer: SupportedExplorer;
+  private explorers: Partial<Record<DataSource, SupportedExplorer>>;
 
   /**
    * Constructor
    */
   constructor() {
-    this.explorer = new VciExplorer();
-    logger.debug('Initialized QuoteModule');
+    // Initialize explorers for different data sources
+    this.explorers = {
+      [DataSource.VCI]: new VciExplorer(),
+      [DataSource.TCBS]: new TcbsExplorer(),
+      [DataSource.SSI]: new SsiExplorer(),
+    };
+
+    // Set the default explorer
+    const defaultSource = config.get('defaultSource');
+    // Ensure we have a valid explorer (default to VCI if specified explorer is not available)
+    const vciExplorer = this.explorers[DataSource.VCI] as VciExplorer;
+    this.explorer = this.explorers[defaultSource] || vciExplorer;
+
+    logger.debug(
+      `Initialized QuoteModule with default source: ${defaultSource}`
+    );
   }
 
   /**
@@ -69,7 +89,20 @@ export class QuoteModule {
     date?: string
   ): Promise<ApiResponse<any>> {
     logger.info(`Getting intraday data for ${symbol}`);
-    return this.explorer.getIntraday(symbol, date);
+
+    // Only SSI and VCI have intraday endpoints
+    if (this.explorer instanceof SsiExplorer) {
+      return this.explorer.getIntraday(symbol, date);
+    } else if (this.explorer instanceof VciExplorer) {
+      return this.explorer.getIntraday(symbol, date);
+    } else {
+      logger.warning(
+        `Intraday data not available for current source: ${this.getDataSource()}`
+      );
+      throw new Error(
+        `Intraday data not available for data source: ${this.getDataSource()}`
+      );
+    }
   }
 
   /**
@@ -77,7 +110,13 @@ export class QuoteModule {
    * @param source - Data source to use
    */
   public setDataSource(source: DataSource): void {
-    this.explorer.setSource(source);
+    const explorer = this.explorers[source];
+    if (!explorer) {
+      logger.error(`Data source not implemented: ${source}`);
+      throw new Error(`Data source not implemented: ${source}`);
+    }
+
+    this.explorer = explorer;
     logger.info(`Changed data source to ${source}`);
   }
 

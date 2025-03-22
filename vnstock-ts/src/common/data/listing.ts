@@ -2,26 +2,47 @@
  * Stock listing and ticker data module
  */
 import { VciExplorer } from '../../core/explorer/vci';
+import { TcbsExplorer } from '../../core/explorer/tcbs';
+import { SsiExplorer } from '../../core/explorer/ssi';
 import { ApiResponse, PaginationParams } from '../../types/api';
 import { StockListing } from '../../types/models';
 import { getLogger } from '../../core/utils/logger';
 import { DataSource } from '../../types/config';
 import { EXCHANGES } from '../../core/config/const';
+import { config } from '../../core/config';
 
 const logger = getLogger('ListingModule');
+
+// Type for supported explorers
+type SupportedExplorer = VciExplorer | TcbsExplorer | SsiExplorer;
 
 /**
  * Listing module for accessing ticker data
  */
 export class ListingModule {
-  private explorer: VciExplorer;
+  private explorer: SupportedExplorer;
+  private explorers: Partial<Record<DataSource, SupportedExplorer>>;
 
   /**
    * Constructor
    */
   constructor() {
-    this.explorer = new VciExplorer();
-    logger.debug('Initialized ListingModule');
+    // Initialize explorers for different data sources
+    this.explorers = {
+      [DataSource.VCI]: new VciExplorer(),
+      [DataSource.TCBS]: new TcbsExplorer(),
+      [DataSource.SSI]: new SsiExplorer(),
+    };
+
+    // Set the default explorer
+    const defaultSource = config.get('defaultSource');
+    // Ensure we have a valid explorer (default to VCI if specified explorer is not available)
+    const vciExplorer = this.explorers[DataSource.VCI] as VciExplorer;
+    this.explorer = this.explorers[defaultSource] || vciExplorer;
+
+    logger.debug(
+      `Initialized ListingModule with default source: ${defaultSource}`
+    );
   }
 
   /**
@@ -33,7 +54,17 @@ export class ListingModule {
     params?: PaginationParams
   ): Promise<ApiResponse<StockListing[]>> {
     logger.info('Getting all stock listings');
-    return this.explorer.getListing(params);
+
+    if (this.explorer instanceof VciExplorer) {
+      return this.explorer.getListing(params);
+    } else if (this.explorer instanceof TcbsExplorer) {
+      return this.explorer.getListing(params);
+    } else if (this.explorer instanceof SsiExplorer) {
+      return this.explorer.getListing(params);
+    }
+
+    // This should never happen as we ensure explorer is always valid in constructor
+    throw new Error(`Invalid explorer type: ${typeof this.explorer}`);
   }
 
   /**
@@ -55,7 +86,17 @@ export class ListingModule {
     }
 
     logger.info(`Getting stock listings for exchange: ${exchange}`);
-    return this.explorer.getFilteredListing(exchange, undefined, params);
+
+    if (this.explorer instanceof VciExplorer) {
+      return this.explorer.getFilteredListing(exchange, undefined, params);
+    } else if (this.explorer instanceof SsiExplorer) {
+      return this.explorer.getFilteredListing(exchange, params);
+    } else if (this.explorer instanceof TcbsExplorer) {
+      return this.explorer.getFilteredListing(exchange, undefined, params);
+    }
+
+    // This should never happen as we ensure explorer is always valid in constructor
+    throw new Error(`Invalid explorer type: ${typeof this.explorer}`);
   }
 
   /**
@@ -69,7 +110,18 @@ export class ListingModule {
     params?: PaginationParams
   ): Promise<ApiResponse<StockListing[]>> {
     logger.info(`Getting stock listings for industry: ${industry}`);
-    return this.explorer.getFilteredListing(undefined, industry, params);
+
+    // Only VCI supports filtering by industry directly
+    if (this.explorer instanceof VciExplorer) {
+      return this.explorer.getFilteredListing(undefined, industry, params);
+    } else {
+      logger.warning(
+        `Industry filtering not supported by data source: ${this.getDataSource()}`
+      );
+      throw new Error(
+        `Industry filtering not supported by data source: ${this.getDataSource()}`
+      );
+    }
   }
 
   /**
@@ -95,7 +147,18 @@ export class ListingModule {
     logger.info(
       `Getting stock listings for exchange: ${exchange}, industry: ${industry}`
     );
-    return this.explorer.getFilteredListing(exchange, industry, params);
+
+    // Only VCI supports filtering by both exchange and industry
+    if (this.explorer instanceof VciExplorer) {
+      return this.explorer.getFilteredListing(exchange, industry, params);
+    } else {
+      logger.warning(
+        `Industry filtering not supported by data source: ${this.getDataSource()}`
+      );
+      throw new Error(
+        `Industry filtering not supported by data source: ${this.getDataSource()}`
+      );
+    }
   }
 
   /**
@@ -103,7 +166,13 @@ export class ListingModule {
    * @param source - Data source to use
    */
   public setDataSource(source: DataSource): void {
-    this.explorer.setSource(source);
+    const explorer = this.explorers[source];
+    if (!explorer) {
+      logger.error(`Data source not implemented: ${source}`);
+      throw new Error(`Data source not implemented: ${source}`);
+    }
+
+    this.explorer = explorer;
     logger.info(`Changed data source to ${source}`);
   }
 
