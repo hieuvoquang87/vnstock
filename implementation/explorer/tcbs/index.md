@@ -1,5 +1,8 @@
 # TCBS Data Source Explorer
 
+**Original Python Implementation**: [__init__.py](/vnstock/explorer/tcbs/__init__.py)
+
+
 ## Overview
 
 The TCBS (Techcom Securities) data source explorer provides access to financial data from the TCBS platform, one of Vietnam's leading securities companies. This module interacts with TCBS APIs to retrieve various types of financial data, market information, and trading data.

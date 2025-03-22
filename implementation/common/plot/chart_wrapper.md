@@ -1,5 +1,8 @@
 # Implementation of Charts Module
 
+**Original Python Implementation**: [chart_wrapper.py](/vnstock/common/plot/chart_wrapper.py)
+
+
 ## Overview
 
 The Charts module builds upon the basic plotting functionality to provide specialized financial charts and visualizations for the `vnstock` package. While the `common/plot` module handles general-purpose charting, this module focuses on financial visualizations like candlestick charts, OHLC (Open-High-Low-Close) charts, technical indicators, and advanced interactive features needed for financial data analysis.

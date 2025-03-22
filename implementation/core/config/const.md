@@ -1,5 +1,8 @@
 # Implementation of Configuration Module (Data Modules)
 
+**Original Python Implementation**: [const.py](/vnstock/core/config/const.py)
+
+
 ## Overview
 
 The configuration module in the `vnstock` package provides centralized management of global settings and constants used across the library. It includes default data sources, timeouts, API endpoints, and other configurable parameters that affect the behavior of data retrieval and processing functions. The primary implementation is in two files: `const.py` for constants and through the `Config` class in the data_explorer module.

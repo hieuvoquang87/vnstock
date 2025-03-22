@@ -1,5 +1,8 @@
 # Implementation of Listing Module (VCI Explorer)
 
+**Original Python Implementation**: [listing.py](/vnstock/explorer/vci/listing.py)
+
+
 ## Overview
 
 The `listing.py` module in the Python `vnstock` package provides functionality to retrieve listings and symbol data from the VCI data source. It offers methods to fetch lists of stocks by different criteria, including all symbols, industry classification, exchange, and predefined groups. The module also provides convenience methods for retrieving specialized instrument types such as futures, bonds, and covered warrants.

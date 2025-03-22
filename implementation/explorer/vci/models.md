@@ -1,5 +1,8 @@
 # VCI Models Implementation
 
+**Original Python Implementation**: [models.py](/vnstock/explorer/vci/models.py)
+
+
 ## Overview
 
 The `models.py` file defines data validation models for VCI data source using Pydantic. These models are used to validate and structure input data before making API requests.

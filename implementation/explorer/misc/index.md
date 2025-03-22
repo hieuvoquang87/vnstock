@@ -1,5 +1,8 @@
 # Misc Explorer Overview
 
+**Original Python Implementation**: [__init__.py](/vnstock/explorer/misc/__init__.py)
+
+
 ## Introduction
 
 The Misc Explorer is a specialized module in the vnstock TypeScript library designed to provide access to various miscellaneous financial data not directly related to stock markets. This module focuses on alternative financial data sources such as currency exchange rates, precious metal prices, interest rates, and other economic indicators that complement the stock market data available through other explorers.

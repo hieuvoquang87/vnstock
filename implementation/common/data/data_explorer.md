@@ -1,5 +1,8 @@
 # Implementation of API Module (Data Modules)
 
+**Original Python Implementation**: [data_explorer.py](/vnstock/common/data/data_explorer.py)
+
+
 ## Overview
 
 The `data_explorer.py` module in the Python `vnstock` package provides a comprehensive API interface for accessing financial market data from various sources. It implements a component-based architecture where each component (Quote, Listing, Trading, etc.) serves as a facade to the underlying data source implementations. This design allows for easy switching between data sources while maintaining a consistent API. The module also implements caching, retries, and error handling to improve performance and reliability.

@@ -1,5 +1,8 @@
 # VCI Constants Implementation
 
+**Original Python Implementation**: [const.py](/vnstock/explorer/vci/const.py)
+
+
 ## Overview
 
 The `const.py` file defines constants, mappings, and configuration values used throughout the VCI data source modules. These constants include API URLs, data type mappings, column mappings, and various other configuration values needed for data fetching and processing.

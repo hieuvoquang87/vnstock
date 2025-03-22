@@ -1,5 +1,8 @@
 # FMARKET Data Source Explorer
 
+**Original Python Implementation**: [__init__.py](/vnstock/explorer/fmarket/__init__.py)
+
+
 ## Overview
 
 The FMARKET data source explorer provides access to mutual fund data in Vietnam's financial market. This module interacts with the FMARKET APIs to retrieve information about various mutual funds, their NAV (Net Asset Value) history, performance metrics, and related investment information.

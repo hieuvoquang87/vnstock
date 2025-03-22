@@ -1,5 +1,8 @@
 # TCBS Trading Data Implementation
 
+**Original Python Implementation**: [trading.py](/vnstock/explorer/tcbs/trading.py)
+
+
 ## Overview
 
 This document details the implementation of trading-related functionality in the TCBS explorer. This includes order book data, intraday trading statistics, foreign trading data, and other trading-related information for stocks on the Vietnam market.

@@ -1,5 +1,8 @@
 # FMARKET Explorer Constants and Configuration
 
+**Original Python Implementation**: [const.py](/vnstock/explorer/fmarket/const.py)
+
+
 ## Overview
 
 This document details the constants, enums, configuration values, and mappings used in the FMARKET explorer. These constants serve as reference points for API endpoints, fund categorization, and value mappings throughout the explorer implementation.

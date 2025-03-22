@@ -1,5 +1,8 @@
 # Implementation of DCB Module (Derivatives, Covered Warrants, and Bonds)
 
+**Original Python Implementation**: [dcb.py](/vnstock/explorer/misc/dcb.py)
+
+
 ## Overview
 
 The DCB Module provides comprehensive access to data related to derivatives, covered warrants, and bonds in the Vietnamese financial market. This module enables users to access and analyze specialized financial instruments beyond traditional stocks, offering capabilities for both professional traders and institutional investors.

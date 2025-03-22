@@ -1,5 +1,8 @@
 # TCBS Explorer Data Models
 
+**Original Python Implementation**: [models.py](/vnstock/explorer/tcbs/models.py)
+
+
 ## Overview
 
 This document details the data models used in the TCBS explorer, defining TypeScript interfaces for the various API responses and data structures. These models ensure proper typing and validation of data retrieved from TCBS APIs.

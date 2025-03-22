@@ -1,5 +1,8 @@
 # Data Module Overview
 
+**Original Python Implementation**: [__init__.py](/vnstock/common/data/__init__.py)
+
+
 ## Introduction
 
 The `data` module in the `vnstock` package, located under the `common` namespace, provides high-level data handling utilities and a unified interface for accessing financial data from various sources. This module serves as a facade layer that abstracts away the details of different data providers and offers a consistent API for retrieving market data.

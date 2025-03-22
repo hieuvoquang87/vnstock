@@ -1,5 +1,8 @@
 # VCI Company Implementation
 
+**Original Python Implementation**: [company.py](/vnstock/explorer/vci/company.py)
+
+
 ## Overview
 
 The `company.py` file contains the `Company` class which provides functions to retrieve company information from the VCI data source. This includes company overview, shareholders, officers, subsidiaries, affiliates, news, events, reports, trading statistics, and financial ratios.

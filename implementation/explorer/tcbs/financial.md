@@ -1,5 +1,8 @@
 # TCBS Financial Data Implementation
 
+**Original Python Implementation**: [financial.py](/vnstock/explorer/tcbs/financial.py)
+
+
 ## Overview
 
 This document details the implementation of financial data functionality in the TCBS explorer. This includes financial statements (income statement, balance sheet, cash flow), financial ratios, and dividend data for listed companies on the Vietnam stock market.

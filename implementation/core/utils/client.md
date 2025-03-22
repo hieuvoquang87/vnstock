@@ -1,5 +1,17 @@
 # Implementation of HTTP Client
 
+**Original Python Implementation**: [vnstock/core/utils/client.py](/vnstock/core/utils/client.py)
+
+## Purpose
+
+The HTTP Client module serves several critical purposes in the vnstock library:
+
+1. **Centralized Communication**: Provides a single point of interaction with external APIs, ensuring consistent communication patterns
+2. **Error Handling**: Implements standardized error handling for all network requests, including timeouts, connection issues, and API errors
+3. **Request Standardization**: Normalizes the format of API requests across different data sources
+4. **Logging Integration**: Integrates with the logging system to provide visibility into API communication for debugging
+5. **Cross-Platform Compatibility**: Abstracts platform-specific networking code to work consistently in different environments
+
 ## Overview
 
 The `client` module provides a centralized HTTP client utility for making API requests with consistent error handling across the `vnstock` package. It includes a simple wrapper around the Python `requests` library that standardizes request formatting, error handling, and logging.

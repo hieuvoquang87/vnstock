@@ -1,5 +1,8 @@
 # VCI Quote Implementation
 
+**Original Python Implementation**: [quote.py](/vnstock/explorer/vci/quote.py)
+
+
 ## Overview
 
 The `quote.py` file contains the `Quote` class which provides functions to retrieve historical price data, intraday trading data, and price depth statistics for stocks from the VCI data source.

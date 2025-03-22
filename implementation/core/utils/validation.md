@@ -1,5 +1,8 @@
 # Implementation of Validation Module (Core Utilities)
 
+**Original Python Implementation**: [validation.py](/vnstock/core/utils/validation.py)
+
+
 ## Overview
 
 The `validation.py` module in the Python `vnstock` package provides essential input validation utilities used throughout the package. These utilities help ensure data integrity by validating and normalizing user inputs before they're processed by other components. The module includes functions for validating symbols, date ranges, time intervals, pagination parameters, and general model inputs.

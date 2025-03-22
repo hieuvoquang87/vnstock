@@ -1,5 +1,8 @@
 # Implementation of API Utilities
 
+**Original Python Implementation**: [api.py](/vnstock/common/api.py)
+
+
 ## Overview
 
 The API Utilities module provides a centralized approach to handle API requests and responses across the vnstock library. It abstracts the complexity of making HTTP requests, handling errors, processing responses, and managing request configurations. These utilities serve as the foundation for all data source integrations in the vnstock ecosystem.

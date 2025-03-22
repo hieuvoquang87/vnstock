@@ -1,5 +1,8 @@
 # Implementation of Parser Module (Core Utilities)
 
+**Original Python Implementation**: [parser.py](/vnstock/core/utils/parser.py)
+
+
 ## Overview
 
 The `parser.py` module in the Python `vnstock` package provides essential data parsing and transformation utilities used throughout the package. These utilities handle various tasks such as timestamp parsing, data flattening, and asset type detection. The module acts as a core component that supports data processing functions across different data source modules.

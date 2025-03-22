@@ -1,5 +1,8 @@
 # Implementation of Financial Data Module (VCI Explorer)
 
+**Original Python Implementation**: [financial.py](/vnstock/explorer/vci/financial.py)
+
+
 ## Overview
 
 The `financial.py` module in the Python `vnstock` package provides functionality to retrieve and process financial data for Vietnamese stocks from the VCI data source. This includes financial reports (balance sheets, income statements, cash flows) and financial ratios. The module adapts to different company types (regular companies, banks, securities firms, insurance companies) and handles data transformation and localization.

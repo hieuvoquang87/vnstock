@@ -1,5 +1,8 @@
 # Implementation of Transform Module (Core Utilities)
 
+**Original Python Implementation**: [transform.py](/vnstock/core/utils/transform.py)
+
+
 ## Overview
 
 The `transform.py` module in the Python `vnstock` package provides essential data transformation utilities used throughout the package. These utilities handle various tasks such as converting API responses to standardized DataFrame formats, flattening nested data structures, cleaning HTML content from API responses, and handling timezone-aware timestamps. The module serves as a critical foundation for processing financial data consistently across different data sources.

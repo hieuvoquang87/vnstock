@@ -1,5 +1,8 @@
 # Gold Price Module
 
+**Original Python Implementation**: [gold_price.py](/vnstock/explorer/misc/gold_price.py)
+
+
 ## Overview
 
 The Gold Price module is a component of the Misc Explorer in the vnstock TypeScript library that provides access to gold price data from various sources. This module allows users to retrieve real-time and historical gold prices from both Vietnamese and international markets, offering a comprehensive solution for applications that require gold price data for investment analysis, portfolio tracking, or market research.

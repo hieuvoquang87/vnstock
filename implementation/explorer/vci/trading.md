@@ -1,5 +1,8 @@
 # Implementation of Trading Module (VCI Explorer)
 
+**Original Python Implementation**: [trading.py](/vnstock/explorer/vci/trading.py)
+
+
 ## Overview
 
 The `trading.py` module in the Python `vnstock` package provides functionality to retrieve trading data from the VCI data source. It focuses on real-time market data, specifically the price board information which displays bid/ask orders, match prices, and other trading data for one or more symbols. This module is particularly useful for applications that need to display real-time market data or analyze current trading conditions.

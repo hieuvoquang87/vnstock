@@ -1,5 +1,8 @@
 # Implementation of User Agent Module (Core Utilities)
 
+**Original Python Implementation**: [user_agent.py](/vnstock/core/utils/user_agent.py)
+
+
 ## Overview
 
 The `user_agent.py` module in the Python `vnstock` package provides functionality for generating and managing HTTP User-Agent headers for API requests. It creates appropriate headers for different data sources, optionally using random user agents to avoid detection or rate-limiting by APIs. This module is used by the client utilities to ensure that requests appear legitimate and are accepted by the target APIs.

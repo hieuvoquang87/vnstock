@@ -1,5 +1,8 @@
 # Implementation of Vnstock Unified API
 
+**Original Python Implementation**: [vnstock.py](/vnstock/common/vnstock.py)
+
+
 ## Overview
 
 The `Vnstock` class serves as the main entry point for the library, providing a unified API to access various data sources and components. It acts as a factory for creating specialized components like `StockComponents`, `MSNComponents`, and `Fund`, based on the requested asset type and data source.

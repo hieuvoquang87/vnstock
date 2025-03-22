@@ -1,5 +1,8 @@
 # Implementation of CSV Handling
 
+**Original Python Implementation**: [csv.py](/vnstock/common/csv.py)
+
+
 ## Overview
 
 The CSV handling module provides utilities for importing and exporting data in CSV format. While the Python implementation leverages pandas' built-in CSV functionality, the TypeScript implementation requires dedicated utilities to handle CSV operations efficiently.

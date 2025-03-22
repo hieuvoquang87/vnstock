@@ -1,5 +1,8 @@
 # Implementation of Data Helper Functions
 
+**Original Python Implementation**: [helper.py](/vnstock/common/data/helper.py)
+
+
 ## Overview
 
 The `vnstock` package includes various helper functions and utilities for data manipulation, extraction, and processing that are used across different modules. While there isn't a dedicated `helper.py` file in the `common/data` directory, these functions are distributed throughout the codebase, particularly in the core utilities and data explorer modules. This document consolidates the documentation for these helper functions to provide a comprehensive reference.

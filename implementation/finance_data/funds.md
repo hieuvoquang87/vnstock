@@ -1,5 +1,8 @@
 # Implementation of Funds Module
 
+**Original Python Implementation**: [fund.py](/vnstock/explorer/fmarket/fund.py)
+
+
 ## Overview
 
 The Funds Module provides comprehensive access to mutual fund data in the Vietnamese financial market. This module enables users to retrieve information about fund performance, holdings, asset allocations, and NAV history for investment and analysis purposes.

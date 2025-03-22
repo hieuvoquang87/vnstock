@@ -1,5 +1,8 @@
 # MSN Explorer Helper Functions
 
+**Original Python Implementation**: [helper.py](/vnstock/explorer/msn/helper.py)
+
+
 ## Overview
 
 This document details the helper functions used in the MSN explorer for data processing, transformations, validations, and other supporting tasks. These functions help standardize data formats, handle international data specifications, and ensure proper processing of the MSN Money API responses.

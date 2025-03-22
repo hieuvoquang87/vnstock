@@ -1,5 +1,8 @@
 # Implementation of Analysis Module (VCI Explorer)
 
+**Original Python Implementation**: [analysis.py](/vnstock/explorer/vci/analysis.py)
+
+
 ## Overview
 
 The `analysis.py` module in the Python `vnstock` package is currently a placeholder file with minimal content (only containing a module docstring). However, analysis-related functionality is implemented in the `company.py` module through the `reports()` method of the `Company` class. This method retrieves analyst reports for a specific stock symbol.

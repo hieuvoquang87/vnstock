@@ -1,5 +1,8 @@
 # Implementation of Plotting Functionality
 
+**Original Python Implementation**: [plot.py](/vnstock/common/plot.py)
+
+
 ## Overview
 
 The plotting module provides a convenient interface for creating various types of visualizations from pandas DataFrames and Series in the Python implementation. It wraps around visualization libraries to provide a consistent API. For the TypeScript implementation, we'll use D3.js, a powerful library for creating interactive data visualizations in the browser.

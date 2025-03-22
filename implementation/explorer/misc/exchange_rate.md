@@ -1,5 +1,8 @@
 # Exchange Rate Module
 
+**Original Python Implementation**: [exchange_rate.py](/vnstock/explorer/misc/exchange_rate.py)
+
+
 ## Overview
 
 The Exchange Rate module is a component of the Misc Explorer in the vnstock TypeScript library that provides access to currency exchange rates, with a primary focus on Vietnamese Dong (VND) conversion rates. This module retrieves real-time and historical exchange rate data from multiple sources, offering a comprehensive solution for applications that require currency conversion capabilities.

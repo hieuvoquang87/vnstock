@@ -1,5 +1,8 @@
 # Implementation of Analysis Module
 
+**Original Python Implementation**: [analysis.py](/vnstock/common/analysis.py)
+
+
 ## Overview
 
 The Analysis module in the `vnstock` package provides functionality for analyzing financial data from various sources, including technical and fundamental analysis. In the current state of the Python package, analysis functionality is distributed across several modules rather than being centralized in a single location. This documentation consolidates the existing analysis capabilities and proposes a more structured approach for the TypeScript implementation.

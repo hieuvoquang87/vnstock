@@ -1,5 +1,8 @@
 # Plot Module
 
+**Original Python Implementation**: [__init__.py](/vnstock/common/plot/__init__.py)
+
+
 ## Overview
 
 The Plot module provides charting and visualization capabilities for the vnstock TypeScript library. It enables users to create various types of financial charts and data visualizations, making complex financial data more understandable and actionable. This module serves as a foundation for all visualization features in the library.

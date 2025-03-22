@@ -1,5 +1,8 @@
 # Market Utilities Implementation
 
+**Original Python Implementation**: [market.py](/vnstock/core/utils/market.py)
+
+
 ## Overview
 
 The `market.py` file provides utility functions to check market trading hours and data availability status. This module is essential for determining when markets are open, what trading session is active, and whether real-time data is available.

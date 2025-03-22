@@ -1,5 +1,8 @@
 # Implementation of Models Module
 
+**Original Python Implementation**: [__init__.py](/vnstock/core/models/__init__.py)
+
+
 ## Overview
 
 The Models Module in `vnstock` provides data validation models used throughout the package to validate, structure, and normalize input data. These models ensure data consistency, provide helpful error messages, and simplify the handling of default values across the codebase. The module primarily uses Pydantic in Python for robust data validation.

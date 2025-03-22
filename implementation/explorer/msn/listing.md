@@ -1,5 +1,8 @@
 # MSN Explorer Listing Functionality
 
+**Original Python Implementation**: [listing.py](/vnstock/explorer/msn/listing.py)
+
+
 ## Overview
 
 This document details the listing functionality in the MSN explorer module of the vnstock TypeScript library. The listing functions provide capabilities to search and list securities, market indices, and sectors from MSN Money, with a focus on international market data.

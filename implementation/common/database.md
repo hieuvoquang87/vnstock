@@ -1,5 +1,8 @@
 # Implementation of Database Utilities
 
+**Original Python Implementation**: [database.py](/vnstock/common/database.py)
+
+
 ## Overview
 
 The Database module provides utilities for persistent storage and retrieval of financial data in the `vnstock` package. While the current implementation primarily focuses on API-based data retrieval, database utilities allow for local caching, offline analysis, and persistent storage of historical data.

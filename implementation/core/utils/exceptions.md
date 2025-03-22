@@ -1,5 +1,8 @@
 # Implementation of Exception Handling
 
+**Original Python Implementation**: [exceptions.py](/vnstock/core/utils/exceptions.py)
+
+
 ## Overview
 
 The `vnstock` package does not have a dedicated exceptions module but rather implements a distributed approach to error handling. Throughout the codebase, standard Python exceptions are raised with custom error messages, while error handling is primarily managed through logging, retries for network operations, and graceful degradation when possible.

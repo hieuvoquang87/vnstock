@@ -1,5 +1,8 @@
 # Implementation of Stock Data Module
 
+**Original Python Implementation**: [stock.py](/vnstock/explorer/vci/stock.py)
+
+
 ## Overview
 
 The Stock Data Module provides comprehensive access to stock market data, financial information, and trading functionality. While not implemented as a separate module in the current codebase, stock data functionality is distributed across several components including the `StockComponents` class, which serves as a facade for accessing various stock-related features.

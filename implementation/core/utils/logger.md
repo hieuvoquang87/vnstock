@@ -1,5 +1,8 @@
 # Implementation of Logger Utility
 
+**Original Python Implementation**: [logger.py](/vnstock/core/utils/logger.py)
+
+
 ## Overview
 
 The `logger` module provides a consistent logging mechanism for the `vnstock` package. It offers customizable logging configuration, supporting different output destinations, formatting options, and log rotation capabilities. This module serves as the foundation for all logging throughout the package, ensuring consistent log formatting and behavior.

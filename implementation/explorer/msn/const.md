@@ -1,5 +1,8 @@
 # MSN Explorer Constants and Configuration
 
+**Original Python Implementation**: [const.py](/vnstock/explorer/msn/const.py)
+
+
 ## Overview
 
 This document details the constants, enums, configuration values, and mappings used in the MSN explorer. These constants serve as reference points for API endpoints, market identifiers, and data formatting throughout the explorer implementation.

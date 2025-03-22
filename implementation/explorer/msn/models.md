@@ -1,5 +1,8 @@
 # MSN Explorer Data Models
 
+**Original Python Implementation**: [models.py](/vnstock/explorer/msn/models.py)
+
+
 ## Overview
 
 This document defines the TypeScript interfaces and data models used throughout the MSN explorer. These data structures represent the API response formats, standardized data transformations, and object types used for retrieving and processing financial data from MSN Money.

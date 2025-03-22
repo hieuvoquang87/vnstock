@@ -1,5 +1,8 @@
 # TCBS Listing Data Implementation
 
+**Original Python Implementation**: [listing.py](/vnstock/explorer/tcbs/listing.py)
+
+
 ## Overview
 
 This document details the implementation of stock listing and industry classification functionality in the TCBS explorer. This includes retrieving stock listings by exchange, filtering stocks by industry, and retrieving market indices information.

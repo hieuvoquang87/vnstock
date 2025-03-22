@@ -1,5 +1,8 @@
 # MSN Data Source Explorer
 
+**Original Python Implementation**: [__init__.py](/vnstock/explorer/msn/__init__.py)
+
+
 ## Overview
 
 The MSN data source explorer provides access to financial market data sourced from MSN Money. This module is particularly valuable for retrieving international market data, including global indices, foreign stocks, and market insights that may not be available through Vietnamese data sources.

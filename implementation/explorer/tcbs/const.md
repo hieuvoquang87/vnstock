@@ -1,5 +1,8 @@
 # TCBS Explorer Constants and Configuration
 
+**Original Python Implementation**: [const.py](/vnstock/explorer/tcbs/const.py)
+
+
 ## Overview
 
 This document details the constants, enums, configuration values, and mappings used in the TCBS explorer. These constants serve as reference points for API endpoints, data categorization, and value mappings throughout the explorer implementation.

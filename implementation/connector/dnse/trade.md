@@ -1,5 +1,8 @@
 # DNSE Trading Connector Module
 
+**Original Python Implementation**: [trade.py](/vnstock/connector/dnse/trade.py)
+
+
 ## Overview
 
 The DNSE Trading Connector Module provides a comprehensive interface for interacting with DNSE's trading API. It enables users to authenticate, manage accounts, check balances, place and manage orders, and retrieve transaction information. This module is designed for traders and applications requiring programmatic access to DNSE's trading platform.

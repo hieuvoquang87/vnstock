@@ -1,5 +1,8 @@
 # TCBS Company Data Implementation
 
+**Original Python Implementation**: [company.py](/vnstock/explorer/tcbs/company.py)
+
+
 ## Overview
 
 This document details the implementation of company-related functionality in the TCBS explorer. This includes company profiles, business information, ownership structures, and industry classifications.

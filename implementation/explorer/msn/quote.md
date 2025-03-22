@@ -1,5 +1,8 @@
 # MSN Explorer Quote Functionality
 
+**Original Python Implementation**: [quote.py](/vnstock/explorer/msn/quote.py)
+
+
 ## Overview
 
 This document details the quote functionality in the MSN explorer module of the vnstock TypeScript library. The quote functions provide access to real-time and historical price data for stocks and other securities from MSN Money, with a focus on international markets.

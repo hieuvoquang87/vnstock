@@ -1,5 +1,8 @@
 # TCBS Quote Data Implementation
 
+**Original Python Implementation**: [quote.py](/vnstock/explorer/tcbs/quote.py)
+
+
 ## Overview
 
 This document details the implementation of stock quote-related functionality in the TCBS explorer. This includes real-time stock quotes, intraday trading data, and historical OHLC (Open, High, Low, Close) price data.
