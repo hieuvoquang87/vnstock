@@ -16,7 +16,7 @@ import { DataSource } from '../../types/config';
 /**
  * TCBS Explorer class for stock quote data
  */
-export class TcbsExplorer extends BaseExplorer {
+export class TcbsQuoteExplorer extends BaseExplorer {
   /**
    * Constructor
    */

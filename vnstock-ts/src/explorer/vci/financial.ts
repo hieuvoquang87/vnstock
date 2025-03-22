@@ -12,6 +12,9 @@ import {
   QUARTER_FINANCIAL_MAP,
   YEARLY_FINANCIAL_MAP,
 } from './const';
+import { BaseExplorer } from '../base';
+import { ApiResponse } from '../../types/api';
+import { DataSource } from '../../types/config';
 
 // If you need to generate UUIDs and don't have uuid installed, you can use this function
 function generateRequestId(): string {
@@ -23,6 +26,118 @@ function generateRequestId(): string {
 }
 
 const logger = getLogger('vci.financial');
+
+/**
+ * VCI Explorer for financial data
+ */
+export class VciFinancialExplorer extends BaseExplorer {
+  constructor() {
+    super(DataSource.VCI);
+    // Set any specific headers required for VCI
+    this.setHeaders({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    });
+  }
+
+  /**
+   * Get financial statements from VCI data source
+   * @param symbol - Stock symbol
+   * @param statementType - Type of financial statement (incomestatement, balancesheet, cashflow)
+   * @param period - Reporting period (quarter, year)
+   * @param limit - Maximum number of periods to retrieve
+   * @returns Financial statement data
+   */
+  async getFinancialStatements(
+    symbol: string,
+    statementType: string,
+    period: string = 'quarter',
+    limit: number = 10
+  ): Promise<ApiResponse<any>> {
+    try {
+      if (!symbol) {
+        return {
+          data: null,
+          status: 'error',
+          message: 'Symbol is required',
+        };
+      }
+
+      // The implementation will use existing functions
+      // Will be completed later
+      return {
+        data: {
+          symbol,
+          statementType,
+          period,
+          items: [],
+          periods: [],
+        },
+        status: 'success',
+        message: 'Not fully implemented yet',
+      };
+    } catch (error) {
+      return {
+        data: {
+          symbol,
+          statementType,
+          period,
+          items: [],
+          periods: [],
+        },
+        status: 'error',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  /**
+   * Get financial ratios from VCI data source
+   * @param symbol - Stock symbol
+   * @param period - Reporting period (quarter, year)
+   * @param limit - Maximum number of periods to retrieve
+   * @returns Financial ratios data
+   */
+  async getFinancialRatios(
+    symbol: string,
+    period: string = 'quarter',
+    limit: number = 10
+  ): Promise<ApiResponse<any>> {
+    try {
+      if (!symbol) {
+        return {
+          data: null,
+          status: 'error',
+          message: 'Symbol is required',
+        };
+      }
+
+      // Will call getFinancialIndicator from the existing code
+      // Implementation will be completed later
+      return {
+        data: {
+          symbol,
+          period,
+          items: [],
+          periods: [],
+        },
+        status: 'success',
+        message: 'Not fully implemented yet',
+      };
+    } catch (error) {
+      return {
+        data: {
+          symbol,
+          period,
+          items: [],
+          periods: [],
+        },
+        status: 'error',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+}
 
 /**
  * Get financial indicators information from VCI data source

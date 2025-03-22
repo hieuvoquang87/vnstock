@@ -25,7 +25,7 @@ This document provides a comprehensive summary of the current implementation sta
 - Base Explorer abstract class
 - VCI Explorer implementation
 - TCBS Explorer implementation
-- SSI Explorer implementation
+- ~~SSI Explorer implementation~~ (Removed)
 
 ### Data Modules
 
@@ -94,8 +94,7 @@ vnstock-ts/
 │   │   ├── explorer/          # Data source explorers (current implementation)
 │   │   │   ├── base.ts        # Base explorer class
 │   │   │   ├── vci.ts         # VCI explorer implementation
-│   │   │   ├── tcbs.ts        # TCBS explorer implementation
-│   │   │   └── ssi.ts         # SSI explorer implementation
+│   │   │   └── tcbs.ts        # TCBS explorer implementation
 │   │   └── utils/             # Utility functions
 │   │       ├── logger.ts      # Logging implementation
 │   │       ├── client.ts      # HTTP client

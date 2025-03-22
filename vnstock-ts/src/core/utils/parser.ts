@@ -92,3 +92,23 @@ export function formatPrice(
   const multiplier = Math.pow(10, floating);
   return Math.round(parsedValue * multiplier) / multiplier;
 }
+
+/**
+ * Remove HTML tags from a string
+ * @param html - HTML string to clean
+ * @returns Clean text with HTML tags removed
+ */
+export function cleanHtml(html: string): string {
+  if (!html) return '';
+
+  // Remove HTML tags
+  let cleanText = html.replace(/<[^>]*>/g, ' ');
+
+  // Replace multiple whitespaces with a single space
+  cleanText = cleanText.replace(/\s+/g, ' ');
+
+  // Trim leading and trailing whitespace
+  cleanText = cleanText.trim();
+
+  return cleanText;
+}

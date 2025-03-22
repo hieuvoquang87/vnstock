@@ -201,3 +201,17 @@ class LoggerImpl implements Logger {
 - Document any temporary workarounds or limitations
 - Create detailed interfaces before implementation
 - Maintain comprehensive test coverage throughout development
+
+## Recent Code Changes
+
+### Removed Explorers
+
+- **VND Explorer**: The VND data source explorer has been removed from the codebase. Any functionality that depended on the VND explorer should be updated to use alternative data sources like VCI or TCBS.
+
+- **SSI Explorer**: The SSI data source explorer has been removed. Applications that previously used SSI data should be updated to use other available data sources.
+
+### Impact on Usage
+
+- Applications that directly imported from `vnstock-ts/explorer/vnd` or `vnstock-ts/explorer/ssi` will need to be updated.
+- The `DataSource` enum still includes these values but attempting to use them will result in an error since the implementation is no longer available.
+- Examples that used VND or SSI explorers should be updated to use other data sources.

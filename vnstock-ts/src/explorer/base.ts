@@ -72,7 +72,16 @@ export abstract class BaseExplorer {
    * @returns Full URL
    */
   protected buildUrl(endpoint: string): string {
-    return `${this.endpoints.baseUrl}${endpoint}`;
+    // Check if the endpoint already starts with http or https
+    if (endpoint.startsWith('http')) {
+      return endpoint;
+    }
+
+    // Ensure the endpoint starts with '/' if it doesn't already
+    const formattedEndpoint = endpoint.startsWith('/')
+      ? endpoint
+      : `/${endpoint}`;
+    return `${this.endpoints.baseUrl}${formattedEndpoint}`;
   }
 
   /**

@@ -1,15 +1,16 @@
 /**
  * Main Vnstock class
  */
+
+import { configure } from '../core/config';
+import { DataSource, VnstockConfig } from '../types/config';
+import { getLogger } from '../core/utils/logger';
 import {
   CompanyModule,
   FinanceModule,
   ListingModule,
   QuoteModule,
 } from './data';
-import { configure } from '../core/config';
-import { DataSource, VnstockConfig } from '../types/config';
-import { getLogger } from '../core/utils/logger';
 
 const logger = getLogger('Vnstock');
 

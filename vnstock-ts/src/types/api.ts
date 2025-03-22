@@ -3,13 +3,12 @@
  */
 
 /**
- * Common API response format
+ * API response format
  */
 export interface ApiResponse<T> {
-  status: string | number;
   data: T;
+  status: 'success' | 'error';
   message?: string;
-  error?: string;
 }
 
 /**
@@ -17,11 +16,10 @@ export interface ApiResponse<T> {
  */
 export interface RequestOptions {
   url: string;
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   headers?: Record<string, string>;
-  payload?: any;
   params?: Record<string, any>;
-  data?: any;
+  payload?: any;
   timeout?: number;
   showLog?: boolean;
 }
@@ -59,10 +57,10 @@ export class ValidationError extends Error {
  * Pagination parameters
  */
 export interface PaginationParams {
-  page?: number;
-  pageSize?: number;
   limit?: number;
   offset?: number;
+  page?: number;
+  pageSize?: number;
 }
 
 /**

@@ -10,7 +10,7 @@ import { DataSource } from '../../types/config';
 /**
  * TCBS Explorer class for company profile data
  */
-export class TcbsExplorer extends BaseExplorer {
+export class TcbsCompanyExplorer extends BaseExplorer {
   /**
    * Constructor
    */

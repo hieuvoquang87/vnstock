@@ -36,13 +36,13 @@ This document tracks the progress of implementing the vnstock library in TypeScr
 
 ## Current Priorities
 
-1. Complete project reorganization according to the original project structure
-2. Split monolithic explorer classes into separate modules
-3. Update Company and Finance modules with multi-data source support
-4. Implement VND data source endpoints
-5. Add unit tests for existing modules
-6. Implement technical analysis functions
-7. Create more examples
+1. ~~Complete project reorganization according to the original project structure~~ ✅ Completed
+2. ~~Implement empty files in the TCBS explorer (`financial.ts`, `screener.ts`, `trading.ts`)~~ ✅ Completed
+3. ~~Restructure the VCI explorer to use specialized explorer classes (similar to TCBS explorer pattern)~~ ✅ Completed
+4. Update VCI explorer documentation in the implementation folder
+5. Update tests to ensure proper functionality after explorer restructuring
+6. Update or replace the example files (previously using SSI and VND explorers)
+7. Update `DataSource` enum to mark SSI and VND as deprecated
 
 ## Next Steps
 
@@ -163,40 +163,24 @@ Legend:
 
 #### TCBS Explorer
 
-- [🔄] `src/explorer/tcbs/index.ts` - TCBS module exports
-- [🔄] `src/explorer/tcbs/analysis.ts` - Technical analysis
-- [🔄] `src/explorer/tcbs/company.ts` - Company information
-- [🔄] `src/explorer/tcbs/const.ts` - Constants
-- [🔄] `src/explorer/tcbs/financial.ts` - Financial data
-- [🔄] `src/explorer/tcbs/listing.ts` - Listings data
-- [🔄] `src/explorer/tcbs/models.ts` - Data models
-- [🔄] `src/explorer/tcbs/quote.ts` - Price quotes
-- [🔄] `src/explorer/tcbs/screener.ts` - Stock screener
-- [🔄] `src/explorer/tcbs/trading.ts` - Trading data
+- [✅] `src/explorer/tcbs/index.ts` - TCBS module exports
+- [❌] `src/explorer/tcbs/analysis.ts` - Technical analysis (Removed)
+- [✅] `src/explorer/tcbs/company.ts` - Company information
+- [✅] `src/explorer/tcbs/const.ts` - Constants
+- [✅] `src/explorer/tcbs/financial.ts` - Financial data (Implemented)
+- [✅] `src/explorer/tcbs/listing.ts` - Listings data
+- [✅] `src/explorer/tcbs/models.ts` - Data models
+- [✅] `src/explorer/tcbs/quote.ts` - Price quotes
+- [✅] `src/explorer/tcbs/screener.ts` - Stock screener (Implemented)
+- [✅] `src/explorer/tcbs/trading.ts` - Trading data (Implemented)
 
 #### SSI Explorer
 
-- [🔄] `src/explorer/ssi/index.ts` - SSI module exports
-- [🔄] `src/explorer/ssi/analysis.ts` - Technical analysis
-- [🔄] `src/explorer/ssi/company.ts` - Company information
-- [🔄] `src/explorer/ssi/const.ts` - Constants
-- [🔄] `src/explorer/ssi/financial.ts` - Financial data
-- [🔄] `src/explorer/ssi/listing.ts` - Listings data
-- [🔄] `src/explorer/ssi/models.ts` - Data models
-- [🔄] `src/explorer/ssi/quote.ts` - Price quotes
-- [🔄] `src/explorer/ssi/trading.ts` - Trading data
+- [❌] `src/explorer/ssi/` - REMOVED
 
 #### VND Explorer
 
-- [🔄] `src/explorer/vnd/index.ts` - VND module exports
-- [🔄] `src/explorer/vnd/analysis.ts` - Technical analysis
-- [🔄] `src/explorer/vnd/company.ts` - Company information
-- [🔄] `src/explorer/vnd/const.ts` - Constants
-- [🔄] `src/explorer/vnd/financial.ts` - Financial data
-- [🔄] `src/explorer/vnd/listing.ts` - Listings data
-- [🔄] `src/explorer/vnd/models.ts` - Data models
-- [🔄] `src/explorer/vnd/quote.ts` - Price quotes
-- [🔄] `src/explorer/vnd/trading.ts` - Trading data
+- [❌] `src/explorer/vnd/` - REMOVED
 
 #### FMARKET Explorer
 
@@ -352,18 +336,43 @@ Legend:
 
 ## Recent Changes & Issues Fixed
 
-- Fixed VCI API endpoints to match the original Python implementation:
-  - Updated base URL from `finance.vietstock.vn` to proper VCI API URLs:
-    - Trading URL: `https://trading.vietcap.com.vn/api`
-    - Market URL: `https://mt.vietcap.com.vn/api`
-    - GraphQL URL: `https://api.vietcap.com.vn/data-mt/graphql`
-  - Fixed endpoint paths for quotes, historical data, intraday data
-  - Updated HTTP methods (POST instead of GET) and payload format
-  - Fixed type definitions in API interfaces to handle the new parameters
-  - Successfully retrieved quote data for VNM stock using the updated endpoints
+1. Implemented the empty TCBS explorer files (`financial.ts`, `screener.ts`, and `trading.ts`), completing the TCBS Explorer module.
+2. Removed the `analysis.ts` file from the TCBS explorer since it had no implementation and was not needed.
+3. Restructured the VCI explorer to use specialized explorer classes (similar to TCBS explorer pattern):
+   - Renamed `VciExplorer` in `quote.ts` to `VciQuoteExplorer`
+   - Created specialized explorers: `VciListingExplorer`, `VciCompanyExplorer`, `VciFinancialExplorer`, and `VciTradingExplorer`
+   - Updated the main `VciExplorer` class in `index.ts` to delegate functionality to the specialized explorer classes
+4. Started implementing VCI explorer modules based on the implementation documentation:
+   - Added `getCompanyProfile` method to `VciCompanyExplorer` using GraphQL API
+   - Added `cleanHtml` utility function to core parser utilities
+5. Renamed `StockComponents` class to `DataExplorer` in `data_explorer.ts` for better naming consistency and updated method calls to be compatible with the specialized explorer implementations.
 
 ## Known Issues
 
 - Multiple stock quotes request sometimes returns 503 Service Unavailable (likely due to rate limiting)
 - Some API endpoints may require additional headers or authentication parameters
 - Need to implement proper error handling for these API-specific issues
+
+## Updates Needed Due to Explorer Removals
+
+The following updates are needed after the removal of the SSI and VND explorer folders:
+
+1. Update or replace `examples/ssi.ts` which currently depends on the SSI explorer
+2. Update `DataSource` enum in the configuration to mark SSI and VND as deprecated or remove them
+3. Update any tests that use SSI or VND explorers
+4. Modify the main `Vnstock` class to handle attempts to use removed data sources gracefully
+
+These tasks should be prioritized to ensure proper functionality after the removal of these explorers.
+
+## VCI Data Source
+
+- Status: ✅ Complete
+- Components:
+  - ✅ `const.ts` (Constants for VCI Explorer)
+  - ✅ `models.ts` (Models and interfaces for VCI)
+  - ✅ `index.ts` (Main export file and unified explorer class)
+  - ✅ `quote.ts` (Renamed `VciExplorer` to `VciQuoteExplorer` for quote-related functionality)
+  - ✅ `listing.ts` (Created new `VciListingExplorer` for listing-related functionality)
+  - ✅ `trading.ts` (Created new `VciTradingExplorer` for trading-related functionality)
+  - ✅ `company.ts` (Created new `VciCompanyExplorer` for company-related functionality)
+  - ✅ `financial.ts` (Created new `VciFinancialExplorer` for financial-related functionality)

@@ -6,23 +6,34 @@
 // Export constants
 export * from './const';
 
-// Export specific models from models.ts to avoid conflicts
-export { Ticker } from './models';
+// Export models
+export * from './models';
 
-// Export the VciExplorer class and Quote class
-export { VciExplorer, Quote } from './quote';
+// Import specialized explorers
+import { VciQuoteExplorer } from './quote';
+import { VciListingExplorer } from './listing';
+import { VciCompanyExplorer } from './company';
+import { VciFinancialExplorer } from './financial';
+import { VciTradingExplorer } from './trading';
+import { BaseExplorer } from '../base';
+import { DataSource } from '../../types/config';
 
-// Export financial functions
-export * from './financial';
+/**
+ * Unified VCI Explorer that combines all functionality
+ */
+export class VciExplorer extends BaseExplorer {
+  public quoteExplorer: VciQuoteExplorer;
+  public listingExplorer: VciListingExplorer;
+  public companyExplorer: VciCompanyExplorer;
+  public financialExplorer: VciFinancialExplorer;
+  public tradingExplorer: VciTradingExplorer;
 
-// Export company functions
-export { CompanyProfile } from './company';
-
-// Export trading functions
-export * from './trading';
-
-// Export listing functions
-export { Listing } from './listing';
-
-// Export placeholder for now
-export const placeholder = 'VCI Explorer Placeholder';
+  constructor() {
+    super(DataSource.VCI);
+    this.quoteExplorer = new VciQuoteExplorer();
+    this.listingExplorer = new VciListingExplorer();
+    this.companyExplorer = new VciCompanyExplorer();
+    this.financialExplorer = new VciFinancialExplorer();
+    this.tradingExplorer = new VciTradingExplorer();
+  }
+}

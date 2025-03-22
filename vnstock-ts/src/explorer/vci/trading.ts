@@ -8,6 +8,9 @@ import { getAssetType } from '../../core/utils/parser';
 import { getHeaders } from '../../core/utils/user_agent';
 import { tradingHours } from '../../core/utils/market';
 import { _TRADING_URL, _PRICE_INFO_MAP } from './const';
+import { BaseExplorer } from '../base';
+import { ApiResponse } from '../../types/api';
+import { DataSource } from '../../types/config';
 
 const logger = getLogger('vnstock.explorer.vci.trading');
 
@@ -23,6 +26,88 @@ interface PriceBoard {
   value: number;
   lastUpdated: string;
   [key: string]: any;
+}
+
+/**
+ * VCI Explorer for trading data
+ */
+export class VciTradingExplorer extends BaseExplorer {
+  constructor() {
+    super(DataSource.VCI);
+    // Set any specific headers required for VCI
+    this.setHeaders({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    });
+  }
+
+  /**
+   * Get price board data for multiple symbols
+   * @param symbols - Array of stock symbols
+   * @returns Price board data for the requested symbols
+   */
+  async getPriceBoard(
+    symbols: string[] = []
+  ): Promise<ApiResponse<PriceBoard[]>> {
+    try {
+      if (!symbols || symbols.length === 0) {
+        return {
+          data: [],
+          status: 'error',
+          message: 'Symbols array is required and cannot be empty',
+        };
+      }
+
+      logger.debug(`Getting price board for symbols: ${symbols.join(', ')}`);
+
+      // Implementation will be completed later
+      return {
+        data: [],
+        status: 'success',
+        message: 'Not fully implemented yet',
+      };
+    } catch (error) {
+      logger.error(`Error fetching price board: ${error}`);
+      return {
+        data: [],
+        status: 'error',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  /**
+   * Get order book data for a symbol
+   * @param symbol - Stock symbol
+   * @returns Order book data for the requested symbol
+   */
+  async getOrderBook(symbol: string): Promise<ApiResponse<any>> {
+    try {
+      if (!symbol) {
+        return {
+          data: null,
+          status: 'error',
+          message: 'Symbol is required',
+        };
+      }
+
+      logger.debug(`Getting order book for symbol: ${symbol}`);
+
+      // Implementation will be completed later
+      return {
+        data: null,
+        status: 'success',
+        message: 'Not fully implemented yet',
+      };
+    } catch (error) {
+      logger.error(`Error fetching order book for ${symbol}: ${error}`);
+      return {
+        data: null,
+        status: 'error',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
 }
 
 export class Trading {

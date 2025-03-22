@@ -19,7 +19,7 @@ interface ListingParams {
 /**
  * TCBS Listing functionality
  */
-export class TcbsExplorer extends BaseExplorer {
+export class TcbsListingExplorer extends BaseExplorer {
   /**
    * Get stock listings with filtering options
    *

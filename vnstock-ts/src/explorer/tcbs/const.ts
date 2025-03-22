@@ -7,15 +7,15 @@
  */
 export const TCBS_API_ENDPOINTS = {
   /** Stock insights API base URL */
-  STOCK_INSIGHT: 'https://apipubaws.tcbs.com.vn/stock-insight/v1/stock',
+  STOCK_INSIGHT: 'https://apipubaws.tcbs.com.vn/p/v1/stock',
   /** Company analysis API base URL */
-  COMPANY: 'https://apipubaws.tcbs.com.vn/tcanalysis/v1/company',
+  COMPANY: 'https://apipubaws.tcbs.com.vn/p/v1/company',
   /** Market data API base URL */
-  MARKET: 'https://apipubaws.tcbs.com.vn/market/v1',
+  MARKET: 'https://apipubaws.tcbs.com.vn/p/v1/market',
   /** Technical analysis API base URL */
-  TECHNICAL: 'https://apipubaws.tcbs.com.vn/technical-analysis/v1',
+  TECHNICAL: 'https://apipubaws.tcbs.com.vn/p/v1/technical-analysis',
   /** Stock screener API base URL */
-  SCREENER: 'https://apipubaws.tcbs.com.vn/screener/v1/scanner',
+  SCREENER: 'https://apipubaws.tcbs.com.vn/p/v1/screener',
 };
 
 /**

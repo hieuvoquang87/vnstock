@@ -7,6 +7,9 @@ import { sendRequest } from '../../core/utils/client';
 import { getHeaders } from '../../core/utils/user_agent';
 import { _GRAPHQL_URL, _GROUP_CODE } from './const';
 import { StockListing } from '../../types/models';
+import { BaseExplorer } from '../base';
+import { ApiResponse, PaginationParams } from '../../types/api';
+import { DataSource } from '../../types/config';
 
 const logger = getLogger('vnstock.explorer.vci.listing');
 
@@ -32,6 +35,45 @@ interface IndustryInfo {
   level: number;
   childCount: number;
   companyCount: number;
+}
+
+/**
+ * VCI Explorer class for listing information
+ */
+export class VciListingExplorer extends BaseExplorer {
+  constructor() {
+    super(DataSource.VCI);
+    // Set any specific headers required for VCI
+    this.setHeaders({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    });
+  }
+
+  /**
+   * Get all stock listings
+   *
+   * @param params Optional pagination parameters
+   * @returns Promise resolving to stock listings
+   */
+  async getStockListings(
+    params?: PaginationParams
+  ): Promise<ApiResponse<StockListing[]>> {
+    try {
+      // Implementation will be completed later
+      return {
+        data: [],
+        status: 'success',
+        message: 'Not fully implemented yet',
+      };
+    } catch (error) {
+      return {
+        data: [],
+        status: 'error',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
 }
 
 export class Listing {

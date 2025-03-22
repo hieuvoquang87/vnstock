@@ -37,9 +37,9 @@ import { Company, CompanyProfile } from './company';
 const logger = getLogger('vnstock.explorer.vci.quote');
 
 /**
- * VCI Explorer class for stock data
+ * VCI Explorer class for stock quote data
  */
-export class VciExplorer extends BaseExplorer {
+export class VciQuoteExplorer extends BaseExplorer {
   /**
    * Constructor
    */

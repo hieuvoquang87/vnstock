@@ -17,12 +17,13 @@ export interface Ticker {
  */
 export interface OHLCData {
   symbol: string;
-  time: string | number; // Timestamp or ISO date string
+  timestamp: string;
   open: number;
   high: number;
   low: number;
   close: number;
   volume: number;
+  adjustedClose?: number;
   change?: number;
   percentChange?: number;
   source?: string;
@@ -37,10 +38,13 @@ export interface Quote {
   price: number;
   change: number;
   percentChange: number;
-  open: number;
-  high: number;
-  low: number;
   volume: number;
+  timestamp: string;
+  open?: number;
+  high?: number;
+  low?: number;
+  close?: number;
+  previousClose?: number;
   marketCap?: number;
   time: string | number;
   exchange: string;
@@ -52,16 +56,17 @@ export interface Quote {
  */
 export interface CompanyProfile {
   symbol: string;
-  exchange: string;
   companyName: string;
-  industryID?: number;
-  industry?: string;
-  sector?: string;
-  established?: string;
+  exchange: string;
+  industry: string;
+  sector: string;
+  description?: string;
   website?: string;
-  overview?: string;
-  employees?: number;
   address?: string;
+  established?: string;
+  employeeCount?: number;
+  industryID?: number;
+  overview?: string;
   phone?: string;
   revenue?: number;
   profit?: number;
@@ -143,15 +148,18 @@ export interface OwnershipData {
  */
 export interface StockListing {
   symbol: string;
+  companyName: string;
   exchange: string;
+  industry: string;
+  sector: string;
   shortName: string;
   fullName: string;
-  industry?: string;
-  sector?: string;
+  industryCode: string;
+  sectorCode: string;
   marketCap?: number;
   sharesOutstanding?: number;
-  status?: string;
   listedDate?: string;
+  status?: string;
 }
 
 /**

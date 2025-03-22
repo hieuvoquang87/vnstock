@@ -3,21 +3,7 @@
  */
 
 /**
- * Main configuration interface
- */
-export interface VnstockConfig {
-  apiTimeout: number;
-  maxRetries: number;
-  userAgent: string;
-  defaultSource: DataSource;
-  logLevel: LogLevel;
-  cacheEnabled: boolean;
-  cacheDuration: number;
-  proxyUrl?: string;
-}
-
-/**
- * Data source enum
+ * Data sources enum
  */
 export enum DataSource {
   VCI = 'VCI',
@@ -25,46 +11,56 @@ export enum DataSource {
   SSI = 'SSI',
   VND = 'VND',
   MSN = 'MSN',
-  DNSE = 'DNSE',
-  TVSI = 'TVSI',
-  WCI = 'WCI',
+  FMARKET = 'FMARKET',
+  MISC = 'MISC',
 }
 
 /**
- * Log level enum
+ * Log levels
  */
 export enum LogLevel {
-  DEBUG = 'debug',
-  INFO = 'info',
-  WARNING = 'warning',
-  ERROR = 'error',
-  CRITICAL = 'critical',
-  NONE = 'none',
+  DEBUG = 'DEBUG',
+  INFO = 'INFO',
+  WARNING = 'WARNING',
+  ERROR = 'ERROR',
+  CRITICAL = 'CRITICAL',
+}
+
+/**
+ * API endpoints for data sources
+ */
+export interface ApiEndpoints {
+  baseUrl: string;
+  quote?: string;
+  listing?: string;
+  company?: string;
+  financial?: string;
+  analysis?: string;
+  screener?: string;
+  trading?: string;
 }
 
 /**
  * Trading hours configuration
  */
 export interface TradingHours {
-  open: string; // Format: 'HH:MM'
-  close: string; // Format: 'HH:MM'
-  breakStart?: string; // Format: 'HH:MM'
-  breakEnd?: string; // Format: 'HH:MM'
+  open: string;
+  close: string;
+  breakStart?: string;
+  breakEnd?: string;
 }
 
 /**
- * API endpoints configuration
+ * vnstock configuration
  */
-export interface ApiEndpoints {
-  baseUrl: string;
-  quote: string;
-  company: string;
-  financial: string;
-  ownership: string;
-  listing: string;
-  screener: string;
-  news: string;
-  [key: string]: string;
+export interface VnstockConfig {
+  defaultSource: DataSource;
+  apiTimeout: number;
+  logLevel: LogLevel;
+  maxRetries: number;
+  userAgent: string;
+  cacheEnabled: boolean;
+  cacheDuration: number;
 }
 
 /**

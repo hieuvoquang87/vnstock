@@ -7,8 +7,23 @@ import { sendRequest } from '../../core/utils/client';
 import { getAssetType } from '../../core/utils/parser';
 import { getHeaders } from '../../core/utils/user_agent';
 import { _GRAPHQL_URL } from './const';
+import { BaseExplorer } from '../base';
+import { ApiResponse } from '../../types/api';
+import { DataSource } from '../../types/config';
+import axios from 'axios';
+import { cleanHtml, camelToSnake } from '../../core/utils/parser';
+import { generateUserAgent } from '../../core/utils/user_agent';
 
 const logger = getLogger('vnstock.explorer.vci.company');
+
+// Function to generate unique request ID for GraphQL API
+function generateRequestId(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0,
+      v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
 
 export interface CompanyProfile {
   symbol: string;
@@ -48,6 +63,185 @@ export interface CompanyNews {
   symbol: string;
   publishDate: string;
   url: string;
+}
+
+/**
+ * VCI Explorer class for company information
+ */
+export class VciCompanyExplorer extends BaseExplorer {
+  constructor() {
+    super(DataSource.VCI);
+    // Set any specific headers required for VCI
+    this.setHeaders({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    });
+  }
+
+  /**
+   * Get company profile information
+   *
+   * @param symbol Stock symbol (e.g., VNM)
+   * @returns Promise resolving to company profile
+   */
+  async getCompanyProfile(
+    symbol: string
+  ): Promise<ApiResponse<CompanyProfile | null>> {
+    try {
+      this.validateSymbol(symbol);
+
+      const url = _GRAPHQL_URL;
+
+      // GraphQL query for company profile
+      const query = {
+        operationName: 'CompanyInfo',
+        variables: {
+          ticker: symbol,
+          language: 'vi',
+        },
+        query: `
+          query CompanyInfo($ticker: String!, $language: String) {
+            CompanyListingInfo(ticker: $ticker) {
+              id
+              issueShare
+              history
+              companyProfile
+              icbName3
+              icbName2
+              organName
+              website
+              address
+              phone
+              fax
+              email
+              __typename
+            }
+            TickerPriceInfo(ticker: $ticker) {
+              ticker
+              exchange
+              __typename
+            }
+          }
+        `,
+      };
+
+      logger.debug(`Requesting company profile for ${symbol}`);
+
+      const response = await axios.post(url, query, {
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': generateUserAgent(),
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-QuantEdge-Request-Id': generateRequestId(),
+        },
+        timeout: 30000,
+      });
+
+      if (!response?.data?.data) {
+        return {
+          data: {
+            symbol,
+            companyName: '',
+            exchange: '',
+            industry: '',
+            sector: '',
+            businessAreas: '',
+            listingDate: '',
+            foundingDate: '',
+            website: '',
+            address: '',
+            phone: '',
+            fax: '',
+            email: '',
+          },
+          status: 'error',
+          message: 'Failed to fetch company profile',
+        };
+      }
+
+      const data = response.data.data;
+      const companyData = data.CompanyListingInfo;
+      const exchangeData = data.TickerPriceInfo;
+
+      if (!companyData) {
+        return {
+          data: {
+            symbol,
+            companyName: '',
+            exchange: '',
+            industry: '',
+            sector: '',
+            businessAreas: '',
+            listingDate: '',
+            foundingDate: '',
+            website: '',
+            address: '',
+            phone: '',
+            fax: '',
+            email: '',
+          },
+          status: 'error',
+          message: 'No company data found',
+        };
+      }
+
+      // Clean HTML and extract meaningful content
+      const companyProfile = cleanHtml(companyData.companyProfile || '');
+      const businessAreas = cleanHtml(companyData.history || '');
+
+      return {
+        data: {
+          symbol,
+          companyName: companyData.organName || '',
+          exchange: exchangeData?.exchange || '',
+          industry: companyData.icbName3 || '',
+          sector: companyData.icbName2 || '',
+          businessAreas: businessAreas,
+          listingDate: '', // Not directly available in the response
+          foundingDate: '', // Not directly available in the response
+          website: companyData.website || '',
+          address: companyData.address || '',
+          phone: companyData.phone || '',
+          fax: companyData.fax || '',
+          email: companyData.email || '',
+        },
+        status: 'success',
+        message: 'Successfully fetched company profile',
+      };
+    } catch (error) {
+      return {
+        data: {
+          symbol,
+          companyName: '',
+          exchange: '',
+          industry: '',
+          sector: '',
+          businessAreas: '',
+          listingDate: '',
+          foundingDate: '',
+          website: '',
+          address: '',
+          phone: '',
+          fax: '',
+          email: '',
+        },
+        status: 'error',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  /**
+   * Validate stock symbol format
+   *
+   * @param symbol Stock symbol to validate
+   * @throws Error if symbol is invalid
+   */
+  private validateSymbol(symbol: string): void {
+    if (!symbol || typeof symbol !== 'string' || symbol.length < 3) {
+      throw new Error(`Invalid stock symbol: ${symbol}`);
+    }
+  }
 }
 
 export class Company {
