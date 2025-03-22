@@ -6,6 +6,7 @@ import { getLogger, LogLevel } from '../../core/utils/logger';
 import { sendRequest } from '../../core/utils/client';
 import { getHeaders } from '../../core/utils/user_agent';
 import { _GRAPHQL_URL, _GROUP_CODE } from './const';
+import { StockListing } from '../../types/models';
 
 const logger = getLogger('vnstock.explorer.vci.listing');
 
@@ -50,6 +51,30 @@ export class Listing {
     if (!showLog) {
       logger.setLevel(LogLevel.CRITICAL);
     }
+  }
+
+  /**
+   * Convert a VCI StockSymbol to a standardized StockListing
+   *
+   * @param symbol - Stock symbol from VCI
+   * @returns Standardized StockListing object
+   */
+  private convertToStockListing(symbol: StockSymbol): StockListing {
+    return {
+      symbol: symbol.ticker,
+      companyName: symbol.organName,
+      shortName: symbol.organShortName || symbol.ticker,
+      fullName: symbol.organName,
+      exchange: symbol.exchange,
+      industry: symbol.industryName || symbol.icbName,
+      sector: '',
+      industryCode: symbol.icbCode,
+      sectorCode: '',
+      marketCap: 0,
+      sharesOutstanding: 0,
+      listedDate: '',
+      status: 'active',
+    } as StockListing;
   }
 
   /**
@@ -132,6 +157,127 @@ export class Listing {
       logger.error(`Error fetching all symbols: ${error}`);
       throw error;
     }
+  }
+
+  /**
+   * Get all stocks with optional limit
+   *
+   * @param limit - Maximum number of stocks to return
+   * @returns List of stock listings
+   */
+  public async getStocks(limit?: number): Promise<StockListing[]> {
+    const symbols = await this.allSymbols();
+
+    // Convert to StockListing format
+    let listings = symbols.map((symbol) => this.convertToStockListing(symbol));
+
+    // Apply limit if specified
+    if (limit && limit > 0 && limit < listings.length) {
+      listings = listings.slice(0, limit);
+    }
+
+    return listings;
+  }
+
+  /**
+   * Get stocks by exchange
+   *
+   * @param exchange - Exchange code (HOSE, HNX, UPCOM)
+   * @param limit - Maximum number of stocks to return
+   * @returns List of stock listings filtered by exchange
+   */
+  public async getStocksByExchange(
+    exchange: string,
+    limit?: number
+  ): Promise<StockListing[]> {
+    const symbols = await this.allSymbols();
+
+    // Filter by exchange
+    let filtered = symbols.filter((symbol) => symbol.exchange === exchange);
+
+    // Convert to StockListing format
+    let listings = filtered.map((symbol) => this.convertToStockListing(symbol));
+
+    // Apply limit if specified
+    if (limit && limit > 0 && limit < listings.length) {
+      listings = listings.slice(0, limit);
+    }
+
+    return listings;
+  }
+
+  /**
+   * Get stocks by industry
+   *
+   * @param industry - Industry name or code
+   * @param limit - Maximum number of stocks to return
+   * @returns List of stock listings filtered by industry
+   */
+  public async getStocksByIndustry(
+    industry: string | number,
+    limit?: number
+  ): Promise<StockListing[]> {
+    const symbols = await this.allSymbols();
+
+    // Filter by industry
+    let filtered = symbols.filter((symbol) => {
+      if (typeof industry === 'string') {
+        return symbol.industryName === industry || symbol.icbName === industry;
+      } else {
+        return symbol.icbCode === industry.toString();
+      }
+    });
+
+    // Convert to StockListing format
+    let listings = filtered.map((symbol) => this.convertToStockListing(symbol));
+
+    // Apply limit if specified
+    if (limit && limit > 0 && limit < listings.length) {
+      listings = listings.slice(0, limit);
+    }
+
+    return listings;
+  }
+
+  /**
+   * Get stocks filtered by both exchange and industry
+   *
+   * @param exchange - Exchange code (HOSE, HNX, UPCOM)
+   * @param industry - Industry name or code
+   * @param limit - Maximum number of stocks to return
+   * @returns List of stock listings filtered by exchange and industry
+   */
+  public async getStocksByExchangeAndIndustry(
+    exchange: string,
+    industry: string | number,
+    limit?: number
+  ): Promise<StockListing[]> {
+    const symbols = await this.allSymbols();
+
+    // Filter by exchange and industry
+    let filtered = symbols.filter((symbol) => {
+      const exchangeMatch = symbol.exchange === exchange;
+      let industryMatch = false;
+
+      if (typeof industry === 'string') {
+        industryMatch =
+          symbol.industryName === industry || symbol.icbName === industry;
+      } else {
+        industryMatch = symbol.icbCode === industry.toString();
+      }
+
+      return exchangeMatch && industryMatch;
+    });
+
+    // Convert to StockListing format
+    let listings = filtered.map((symbol) => this.convertToStockListing(symbol));
+
+    // Apply limit if specified
+    if (limit && limit > 0 && limit < listings.length) {
+      listings = listings.slice(0, limit);
+    }
+
+    return listings;
   }
 
   /**

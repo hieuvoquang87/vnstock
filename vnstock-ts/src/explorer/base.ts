@@ -1,12 +1,12 @@
 /**
  * Base explorer class for data sources
  */
-import { ApiEndpoints, DataSource } from '../../types/config';
-import { ApiResponse, RequestOptions } from '../../types/api';
-import { config } from '../config';
-import { getLogger } from '../utils/logger';
-import { sendRequest } from '../utils/client';
-import { API_ENDPOINTS, DEFAULT_HEADERS } from '../config/const';
+import { ApiEndpoints, DataSource } from '../types/config';
+import { ApiResponse, RequestOptions } from '../types/api';
+import { config } from '../core/config';
+import { getLogger } from '../core/utils/logger';
+import { sendRequest } from '../core/utils/client';
+import { API_ENDPOINTS, DEFAULT_HEADERS } from '../core/config/const';
 
 const logger = getLogger('BaseExplorer');
 

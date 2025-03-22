@@ -1,7 +1,7 @@
 /**
  * Company information module
  */
-import { VciExplorer } from '../../core/explorer/vci';
+import { VciExplorer } from '../../explorer/vci';
 import { ApiResponse } from '../../types/api';
 import { CompanyProfile, OwnershipData } from '../../types/models';
 import { getLogger } from '../../core/utils/logger';

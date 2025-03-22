@@ -1,136 +1,83 @@
-import { getLogger, LogLevel } from '../core/utils/logger';
-import { StockComponents, MSNComponents, Fund } from './data/data_explorer';
+/**
+ * Main Vnstock class
+ */
+import {
+  CompanyModule,
+  FinanceModule,
+  ListingModule,
+  QuoteModule,
+} from './data';
+import { configure } from '../core/config';
+import { DataSource, VnstockConfig } from '../types/config';
+import { getLogger } from '../core/utils/logger';
 
-const logger = getLogger('vnstock.common.vnstock');
+const logger = getLogger('Vnstock');
 
 /**
- * Main class for the vnstock library
+ * Main Vnstock class for accessing Vietnam stock market data
  */
 export class Vnstock {
-  /**
-   * Supported data sources
-   */
-  public static SUPPORTED_SOURCES: string[] = ['VCI', 'TCBS', 'MSN'];
+  private readonly _quote: QuoteModule;
+  private readonly _listing: ListingModule;
+  private readonly _company: CompanyModule;
+  private readonly _finance: FinanceModule;
 
   /**
-   * Symbol mappings for different data sources
+   * Constructor
+   * @param config - Optional configuration options
    */
-  public static msn_symbol_map: Record<string, string> = {}; // This should be populated from constants
-
-  private symbol: string | null;
-  private source: string;
-  private showLog: boolean;
-
-  /**
-   * Constructor for the Vnstock class
-   *
-   * @param symbol - The stock symbol to query
-   * @param source - The data source to use (default: 'VCI')
-   * @param showLog - Whether to show log messages (default: true)
-   */
-  constructor(
-    symbol: string | null = null,
-    source: string = 'VCI',
-    showLog: boolean = true
-  ) {
-    this.symbol = symbol;
-    this.source = source.toUpperCase();
-    this.showLog = showLog;
-
-    if (!Vnstock.SUPPORTED_SOURCES.includes(this.source)) {
-      throw new Error(
-        `Hiện tại chỉ có nguồn dữ liệu từ ${Vnstock.SUPPORTED_SOURCES.join(
-          ', '
-        )} được hỗ trợ.`
-      );
+  constructor(config?: Partial<VnstockConfig>) {
+    // Configure library if custom config is provided
+    if (config) {
+      configure(config);
     }
 
-    if (!showLog) {
-      logger.setLevel(LogLevel.CRITICAL);
-    }
+    logger.info('Initializing Vnstock');
+
+    // Initialize modules
+    this._quote = new QuoteModule();
+    this._listing = new ListingModule();
+    this._company = new CompanyModule();
+    this._finance = new FinanceModule();
   }
 
   /**
-   * Get stock data
-   *
-   * @param symbol - The stock symbol to query
-   * @param source - The data source to use (defaults to the instance source)
-   * @returns Stock components
+   * Change the data source for all modules
+   * @param source - Data source to use
    */
-  public stock(
-    symbol: string | null = null,
-    source: string | null = null
-  ): StockComponents {
-    if (symbol === null) {
-      this.symbol = 'VN30F1M';
-      logger.info(
-        'Mã chứng khoán không được chỉ định, chương trình mặc định sử dụng VN30F1M'
-      );
-    } else {
-      this.symbol = symbol;
-    }
-
-    if (source === null) {
-      source = this.source;
-    } else {
-      this.symbol = symbol;
-    }
-
-    return new StockComponents(this.symbol || '', source, this.showLog);
+  public setDataSource(source: DataSource): void {
+    this._quote.setDataSource(source);
+    this._listing.setDataSource(source);
+    this._company.setDataSource(source);
+    this._finance.setDataSource(source);
+    logger.info(`Changed data source to ${source}`);
   }
 
   /**
-   * Get forex data
-   *
-   * @param symbol - The forex symbol to query (default: 'EURUSD')
-   * @param source - The data source to use (default: 'MSN')
-   * @returns MSN components
+   * Access to quote module for price data
    */
-  public fx(symbol: string = 'EURUSD', source: string = 'MSN'): MSNComponents {
-    if (symbol) {
-      this.symbol = Vnstock.msn_symbol_map[symbol];
-    }
-    return new MSNComponents(this.symbol || '', source);
+  public get quote(): QuoteModule {
+    return this._quote;
   }
 
   /**
-   * Get cryptocurrency data
-   *
-   * @param symbol - The cryptocurrency symbol to query (default: 'BTC')
-   * @param source - The data source to use (default: 'MSN')
-   * @returns MSN components
+   * Access to listing module for ticker data
    */
-  public crypto(symbol: string = 'BTC', source: string = 'MSN'): MSNComponents {
-    if (symbol) {
-      this.symbol = Vnstock.msn_symbol_map[symbol];
-    }
-    return new MSNComponents(this.symbol || '', source);
+  public get listing(): ListingModule {
+    return this._listing;
   }
 
   /**
-   * Get world index data
-   *
-   * @param symbol - The index symbol to query (default: 'DJI')
-   * @param source - The data source to use (default: 'MSN')
-   * @returns MSN components
+   * Access to company module for company information
    */
-  public worldIndex(
-    symbol: string = 'DJI',
-    source: string = 'MSN'
-  ): MSNComponents {
-    if (symbol) {
-      this.symbol = Vnstock.msn_symbol_map[symbol];
-    }
-    return new MSNComponents(this.symbol || '', source);
+  public get company(): CompanyModule {
+    return this._company;
   }
 
   /**
-   * Get fund data
-   *
-   * @param source - The data source to use (default: 'FMARKET')
-   * @returns Fund components
+   * Access to finance module for financial data
    */
-  public fund(source: string = 'FMARKET'): Fund {
-    return new Fund(source);
+  public get finance(): FinanceModule {
+    return this._finance;
   }
 }

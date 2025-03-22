@@ -4,7 +4,7 @@
  */
 
 // Main class
-import { Vnstock } from './Vnstock';
+import { Vnstock } from './common/vnstock';
 
 // Data modules
 import {

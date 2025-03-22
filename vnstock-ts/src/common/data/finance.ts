@@ -1,7 +1,8 @@
 /**
  * Financial data module
  */
-import { VciExplorer, TcbsExplorer } from '../../core/explorer';
+import { VciExplorer } from '../../explorer/vci';
+import { TcbsExplorer } from '../../explorer/tcbs';
 import { ApiResponse } from '../../types/api';
 import {
   FinancialStatement,

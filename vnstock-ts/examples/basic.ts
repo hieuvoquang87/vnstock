@@ -37,10 +37,11 @@ async function main() {
 
     // Get stock listings
     console.log('\nGetting stocks on HOSE...');
-    const listingResult = await vnstock.listing.getStocksByExchange('HOSE', {
-      limit: 5,
-    });
-    console.log('Listing result:', JSON.stringify(listingResult, null, 2));
+    const listingResult = await vnstock.listing.getStocksByExchange('HOSE');
+    console.log(
+      'Listing result (first 5):',
+      JSON.stringify(listingResult.data.slice(0, 5), null, 2)
+    );
 
     // Get company profile
     console.log('\nGetting company profile for VNM...');

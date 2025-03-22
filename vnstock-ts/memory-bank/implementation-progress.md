@@ -15,39 +15,44 @@ This document tracks the progress of implementing the vnstock library in TypeScr
 
 ## Module Implementation Progress
 
-| Module                | Completion % | Status      |
-| --------------------- | ------------ | ----------- |
-| Core Utilities        | 100%         | Complete    |
-| Configuration         | 100%         | Complete    |
-| Types & Interfaces    | 100%         | Complete    |
-| Base Explorer         | 100%         | Complete    |
-| VCI Data Source       | 100%         | Complete    |
-| TCBS Data Source      | 100%         | Complete    |
-| SSI Data Source       | 100%         | Complete    |
-| VND Data Source       | 0%           | Not Started |
-| Ticker/Listing Module | 100%         | Complete    |
-| Price/Quote Module    | 100%         | Complete    |
-| Company Module        | 100%         | Complete    |
-| Financial Module      | 100%         | Complete    |
-| Technical Analysis    | 0%           | Not Started |
-| Screener              | 0%           | Not Started |
-| News/Events           | 0%           | Not Started |
+| Module                 | Completion % | Status      |
+| ---------------------- | ------------ | ----------- |
+| Core Utilities         | 100%         | Complete    |
+| Configuration          | 100%         | Complete    |
+| Types & Interfaces     | 100%         | Complete    |
+| Base Explorer          | 100%         | Complete    |
+| VCI Data Source        | 100%         | Complete    |
+| TCBS Data Source       | 100%         | Complete    |
+| SSI Data Source        | 100%         | Complete    |
+| VND Data Source        | 0%           | Not Started |
+| Ticker/Listing Module  | 100%         | Complete    |
+| Price/Quote Module     | 100%         | Complete    |
+| Company Module         | 100%         | Complete    |
+| Financial Module       | 100%         | Complete    |
+| Technical Analysis     | 0%           | Not Started |
+| Screener               | 0%           | Not Started |
+| News/Events            | 0%           | Not Started |
+| Project Reorganization | 50%          | In Progress |
 
 ## Current Priorities
 
-1. Update Company and Finance modules with multi-data source support
-2. Implement VND data source endpoints
-3. Add unit tests for existing modules
-4. Implement technical analysis functions
-5. Create more examples
+1. Complete project reorganization according to the original project structure
+2. Split monolithic explorer classes into separate modules
+3. Update Company and Finance modules with multi-data source support
+4. Implement VND data source endpoints
+5. Add unit tests for existing modules
+6. Implement technical analysis functions
+7. Create more examples
 
 ## Next Steps
 
-1. Update Company and Finance modules to support multiple data sources
-2. Create the `VndExplorer` class extending `BaseExplorer`
-3. Implement basic technical analysis functions
-4. Create unit tests for the core utilities
-5. Add a screener module
+1. Complete the reorganization of explorer modules
+2. Update all imports and references to match the new structure
+3. Update Company and Finance modules to support multiple data sources
+4. Create the `VndExplorer` class extending `BaseExplorer`
+5. Implement basic technical analysis functions
+6. Create unit tests for the core utilities
+7. Add a screener module
 
 ## Technical Debt
 
@@ -79,8 +84,9 @@ Future refactoring should consider:
 
 - **Multi-data Source Support**: Both ListingModule and QuoteModule have been updated to support multiple data sources (VCI, TCBS, SSI) with dynamic switching capability.
 - **SSI Data Source**: Full implementation of SSI data source explorer with all core endpoints.
-- **Modular Architecture**: Consistent explorer pattern across all implemented data sources.
-- **Comprehensive Examples**: Added examples demonstrating explorer comparison, module integration, and error handling strategies.
+- [x] **Modular Architecture**: Consistent explorer pattern across all implemented data sources.
+- [x] **Comprehensive Examples**: Added examples demonstrating explorer comparison, module integration, and error handling strategies.
+- [x] **Directory Structure Reorganization**: Created placeholder files for all modules according to the intended project structure in `project-structure.md`.
 
 ## File Structure Implementation Status
 
@@ -89,6 +95,7 @@ Legend:
 - [ ] Not started
 - [🔄] In progress
 - [✅] Completed
+- [🔧] Needs refactoring
 
 ### Project Files
 
@@ -101,7 +108,7 @@ Legend:
 ### Source Files
 
 - [✅] `src/index.ts` - Main entry point and exports
-- [✅] `src/Vnstock.ts` - Main class
+- [🔧] `src/common/vnstock.ts` - Main class (moved from Vnstock.ts)
 - [✅] `src/types/index.ts` - Type exports
 - [✅] `src/types/api.ts` - API-related types
 - [✅] `src/types/models.ts` - Data model types
@@ -109,23 +116,23 @@ Legend:
 
 ### Core Modules
 
-- [ ] `src/core/index.ts` - Core module exports
+- [🔄] `src/core/index.ts` - Core module exports
 
 #### Utilities
 
-- [ ] `src/core/utils/index.ts` - Utilities exports
+- [🔄] `src/core/utils/index.ts` - Utilities exports
 - [✅] `src/core/utils/client.ts` - HTTP client
 - [✅] `src/core/utils/logger.ts` - Logging implementation
-- [ ] `src/core/utils/env.ts` - Environment utilities
-- [ ] `src/core/utils/ext.ts` - Extension utilities
-- [ ] `src/core/utils/help.ts` - Help utilities
-- [ ] `src/core/utils/launcher.ts` - Application launcher
+- [🔄] `src/core/utils/env.ts` - Environment utilities
+- [🔄] `src/core/utils/ext.ts` - Extension utilities
+- [🔄] `src/core/utils/help.ts` - Help utilities
+- [🔄] `src/core/utils/launcher.ts` - Application launcher
 - [✅] `src/core/utils/market.ts` - Market trading hours utilities
 - [✅] `src/core/utils/parser.ts` - Data parsing utilities
 - [✅] `src/core/utils/transform.ts` - Data transformation utilities
-- [ ] `src/core/utils/upgrade.ts` - Package upgrade utilities
+- [🔄] `src/core/utils/upgrade.ts` - Package upgrade utilities
 - [✅] `src/core/utils/user_agent.ts` - User agent management
-- [ ] `src/core/utils/validation.ts` - Input validation
+- [🔄] `src/core/utils/validation.ts` - Input validation
 
 #### Configuration
 
@@ -134,24 +141,107 @@ Legend:
 
 #### Converters
 
-- [ ] `src/core/converter/index.ts` - Converter exports
-- [ ] `src/core/converter/export.ts` - Data export utilities
+- [🔄] `src/core/converter/index.ts` - Converter exports
+- [🔄] `src/core/converter/export.ts` - Data export utilities
 
 ### Explorer Modules
 
-- [✅] `src/core/explorer/base.ts` - Base explorer class
-- [✅] `src/core/explorer/vci.ts` - VCI explorer implementation
-- [✅] `src/core/explorer/tcbs.ts` - TCBS explorer implementation
-- [✅] `src/core/explorer/ssi.ts` - SSI explorer implementation
-- [ ] `src/core/explorer/vnd.ts` - VND explorer implementation
+- [🔧] `src/explorer/base.ts` - Base explorer class (to be migrated from core/explorer)
+- [🔧] `src/explorer/index.ts` - Explorer exports
+
+#### VCI Explorer
+
+- [🔄] `src/explorer/vci/index.ts` - VCI module exports
+- [🔄] `src/explorer/vci/analysis.ts` - Technical analysis
+- [🔄] `src/explorer/vci/company.ts` - Company information
+- [🔄] `src/explorer/vci/const.ts` - Constants
+- [🔄] `src/explorer/vci/financial.ts` - Financial data
+- [🔄] `src/explorer/vci/listing.ts` - Listings data
+- [🔄] `src/explorer/vci/models.ts` - Data models
+- [🔄] `src/explorer/vci/quote.ts` - Price quotes
+- [🔄] `src/explorer/vci/trading.ts` - Trading data
+
+#### TCBS Explorer
+
+- [🔄] `src/explorer/tcbs/index.ts` - TCBS module exports
+- [🔄] `src/explorer/tcbs/analysis.ts` - Technical analysis
+- [🔄] `src/explorer/tcbs/company.ts` - Company information
+- [🔄] `src/explorer/tcbs/const.ts` - Constants
+- [🔄] `src/explorer/tcbs/financial.ts` - Financial data
+- [🔄] `src/explorer/tcbs/listing.ts` - Listings data
+- [🔄] `src/explorer/tcbs/models.ts` - Data models
+- [🔄] `src/explorer/tcbs/quote.ts` - Price quotes
+- [🔄] `src/explorer/tcbs/screener.ts` - Stock screener
+- [🔄] `src/explorer/tcbs/trading.ts` - Trading data
+
+#### SSI Explorer
+
+- [🔄] `src/explorer/ssi/index.ts` - SSI module exports
+- [🔄] `src/explorer/ssi/analysis.ts` - Technical analysis
+- [🔄] `src/explorer/ssi/company.ts` - Company information
+- [🔄] `src/explorer/ssi/const.ts` - Constants
+- [🔄] `src/explorer/ssi/financial.ts` - Financial data
+- [🔄] `src/explorer/ssi/listing.ts` - Listings data
+- [🔄] `src/explorer/ssi/models.ts` - Data models
+- [🔄] `src/explorer/ssi/quote.ts` - Price quotes
+- [🔄] `src/explorer/ssi/trading.ts` - Trading data
+
+#### VND Explorer
+
+- [🔄] `src/explorer/vnd/index.ts` - VND module exports
+- [🔄] `src/explorer/vnd/analysis.ts` - Technical analysis
+- [🔄] `src/explorer/vnd/company.ts` - Company information
+- [🔄] `src/explorer/vnd/const.ts` - Constants
+- [🔄] `src/explorer/vnd/financial.ts` - Financial data
+- [🔄] `src/explorer/vnd/listing.ts` - Listings data
+- [🔄] `src/explorer/vnd/models.ts` - Data models
+- [🔄] `src/explorer/vnd/quote.ts` - Price quotes
+- [🔄] `src/explorer/vnd/trading.ts` - Trading data
+
+#### FMARKET Explorer
+
+- [🔄] `src/explorer/fmarket/index.ts` - FMARKET module exports
+- [🔄] `src/explorer/fmarket/const.ts` - Constants
+- [🔄] `src/explorer/fmarket/fund.ts` - Fund data
+
+#### MSN Explorer
+
+- [🔄] `src/explorer/msn/index.ts` - MSN module exports
+- [🔄] `src/explorer/msn/const.ts` - Constants
+- [🔄] `src/explorer/msn/helper.ts` - Helper utilities
+- [🔄] `src/explorer/msn/listing.ts` - Listings data
+- [🔄] `src/explorer/msn/models.ts` - Data models
+- [🔄] `src/explorer/msn/quote.ts` - Price quotes
+
+#### MISC Explorer
+
+- [🔄] `src/explorer/misc/index.ts` - Miscellaneous module exports
+- [🔄] `src/explorer/misc/exchange-rate.ts` - Exchange rate data
+- [🔄] `src/explorer/misc/gold-price.ts` - Gold price data
 
 ### Common Functionality
 
+- [🔄] `src/common/index.ts` - Common module exports
+- [🔄] `src/common/cli.ts` - Command-line interface
+- [🔧] `src/common/vnstock.ts` - Core class (renamed from Vnstock.ts)
 - [✅] `src/common/data/index.ts` - Data module exports
 - [✅] `src/common/data/listing.ts` - Stock listing module (multi-source)
 - [✅] `src/common/data/quote.ts` - Price quote module (multi-source)
 - [✅] `src/common/data/company.ts` - Company information module
 - [✅] `src/common/data/finance.ts` - Financial data module
+- [🔄] `src/common/plot/index.ts` - Plot module exports
+- [🔄] `src/common/plot/chart-wrapper.ts` - Chart rendering utilities
+
+### API Connectors
+
+- [🔄] `src/connector/index.ts` - Connector module exports
+- [🔄] `src/connector/dnse/index.ts` - DNSE connector exports
+- [🔄] `src/connector/dnse/trade.ts` - Trading functionality
+
+### Bot Building
+
+- [🔄] `src/botbuilder/index.ts` - Bot builder module exports
+- [🔄] `src/botbuilder/noti.ts` - Notification functionality
 
 ### Distribution
 
@@ -166,6 +256,8 @@ Legend:
 - [ ] `tests/explorer/` - Explorer module tests
 - [ ] `tests/core/` - Core module tests
 - [ ] `tests/common/` - Common module tests
+- [ ] `tests/connector/` - Connector module tests
+- [ ] `tests/botbuilder/` - Bot builder module tests
 
 ### Examples
 
@@ -183,3 +275,95 @@ Legend:
 - [✅] `memory-bank/implementation-progress.md` - Progress tracking
 - [✅] `memory-bank/implementation-summary.md` - Implementation summary
 - [✅] `memory-bank/core-modules.md` - Core modules documentation
+
+## Next Reorganization Tasks
+
+1. Split monolithic explorer classes into separate modules:
+
+   - ✅ Created re-exports from original implementations to make examples work
+   - [ ] Move VCI functionality from core/explorer/vci.ts to explorer/vci/\* modules
+   - [ ] Move TCBS functionality from core/explorer/tcbs.ts to explorer/tcbs/\* modules
+   - [ ] Move SSI functionality from core/explorer/ssi.ts to explorer/ssi/\* modules
+
+2. ✅ Update imports in all files to reflect the new structure:
+
+   - ✅ Updated main index.ts to import from common/vnstock.ts
+   - ✅ Updated common/vnstock.ts imports
+   - ✅ Updated data modules to import explorers from new locations
+   - ✅ Updated base explorer imports
+
+3. ✅ Create temporary re-exports for the explorer classes:
+
+   - ✅ Created re-exports in explorer/vci/index.ts
+   - ✅ Created re-exports in explorer/tcbs/index.ts
+   - ✅ Created re-exports in explorer/ssi/index.ts
+
+4. [ ] Fix API endpoints for VCI, TCBS, and SSI explorers
+
+5. [ ] Create proper content for placeholder files
+
+6. [ ] Update main index.ts entry point to export all functionality from the new structure
+
+## Project Structure Reorganization
+
+- [x] Create directories for new structure
+- [x] Move main Vnstock class from `src/Vnstock.ts` to `src/common/vnstock.ts`
+- [x] Create placeholder files for all functionality modules
+- [x] Update import paths in all files
+- [x] Fix API endpoints for explorers (particularly VCI endpoints)
+- [ ] Split explorer classes into separate modules (quote, company, etc.)
+- [ ] Create content for placeholder files
+- [ ] Update main entry point
+
+## API Implementation
+
+- [x] Base Explorer class
+- [x] VCI Explorer implementation
+- [x] TCBS Explorer implementation
+- [x] SSI Explorer implementation
+- [ ] VND Explorer implementation
+- [ ] MSN Explorer implementation
+- [ ] FMarket Explorer implementation
+
+## Functionality Implementation
+
+- [ ] Quote utilities
+- [ ] Company info utilities
+- [ ] Financial data utilities
+- [ ] Technical analysis utilities
+- [ ] Fundamental analysis utilities
+- [ ] Chart plotting utilities
+- [ ] Stock screening utilities
+- [ ] Backtesting utilities
+- [ ] Trading bot building utilities
+
+## Documentation
+
+- [x] Readme file
+- [x] API documentation
+- [ ] Usage examples
+- [ ] Contributing guidelines
+
+## Testing
+
+- [ ] Unit tests
+- [ ] Integration tests
+- [ ] End-to-end tests
+
+## Recent Changes & Issues Fixed
+
+- Fixed VCI API endpoints to match the original Python implementation:
+  - Updated base URL from `finance.vietstock.vn` to proper VCI API URLs:
+    - Trading URL: `https://trading.vietcap.com.vn/api`
+    - Market URL: `https://mt.vietcap.com.vn/api`
+    - GraphQL URL: `https://api.vietcap.com.vn/data-mt/graphql`
+  - Fixed endpoint paths for quotes, historical data, intraday data
+  - Updated HTTP methods (POST instead of GET) and payload format
+  - Fixed type definitions in API interfaces to handle the new parameters
+  - Successfully retrieved quote data for VNM stock using the updated endpoints
+
+## Known Issues
+
+- Multiple stock quotes request sometimes returns 503 Service Unavailable (likely due to rate limiting)
+- Some API endpoints may require additional headers or authentication parameters
+- Need to implement proper error handling for these API-specific issues

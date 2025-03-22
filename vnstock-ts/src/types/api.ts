@@ -21,6 +21,7 @@ export interface RequestOptions {
   headers?: Record<string, string>;
   payload?: any;
   params?: Record<string, any>;
+  data?: any;
   timeout?: number;
   showLog?: boolean;
 }
@@ -84,7 +85,8 @@ export interface SortOptions<T> {
  */
 export interface DateRangeParams {
   fromDate: string;
-  toDate: string;
+  toDate?: string;
+  timeframe?: string;
 }
 
 /**

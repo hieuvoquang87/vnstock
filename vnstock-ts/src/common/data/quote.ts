@@ -1,9 +1,9 @@
 /**
  * Stock quote and price data module
  */
-import { VciExplorer } from '../../core/explorer/vci';
-import { TcbsExplorer } from '../../core/explorer/tcbs';
-import { SsiExplorer } from '../../core/explorer/ssi';
+import { VciExplorer } from '../../explorer/vci';
+import { TcbsExplorer } from '../../explorer/tcbs';
+import { SsiExplorer } from '../../explorer/ssi';
 import { ApiResponse, DateRangeParams } from '../../types/api';
 import { OHLCData, Quote } from '../../types/models';
 import { getLogger } from '../../core/utils/logger';
@@ -65,7 +65,7 @@ export class QuoteModule {
   }
 
   /**
-   * Get historical data for a stock
+   * Get historical OHLC data
    * @param symbol - Stock symbol
    * @param params - Date range parameters
    * @returns Historical OHLC data
@@ -75,7 +75,20 @@ export class QuoteModule {
     params: DateRangeParams
   ): Promise<ApiResponse<OHLCData[]>> {
     logger.info(`Getting historical data for ${symbol}`);
-    return this.explorer.getHistoricalOHLC(symbol, params);
+
+    // Check if the explorer has the getHistoricalOHLC method with the expected signature
+    if (this.explorer instanceof VciExplorer) {
+      return this.explorer.getHistoricalOHLC(
+        symbol,
+        params.fromDate,
+        params.toDate || new Date().toISOString().split('T')[0], // Default to today
+        params.timeframe || '1D' // Use timeframe instead of resolution
+      );
+    } else {
+      // For other explorers, maintain backward compatibility
+      // @ts-ignore - Different explorers may have different method signatures
+      return this.explorer.getHistoricalOHLC(symbol, params);
+    }
   }
 
   /**
@@ -94,7 +107,8 @@ export class QuoteModule {
     if (this.explorer instanceof SsiExplorer) {
       return this.explorer.getIntraday(symbol, date);
     } else if (this.explorer instanceof VciExplorer) {
-      return this.explorer.getIntraday(symbol, date);
+      // VCI explorer expects a number for resolution
+      return this.explorer.getIntraday(symbol, 1, date);
     } else {
       logger.warning(
         `Intraday data not available for current source: ${this.getDataSource()}`

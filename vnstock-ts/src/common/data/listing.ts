@@ -1,9 +1,9 @@
 /**
  * Stock listing and ticker data module
  */
-import { VciExplorer } from '../../core/explorer/vci';
-import { TcbsExplorer } from '../../core/explorer/tcbs';
-import { SsiExplorer } from '../../core/explorer/ssi';
+import { VciExplorer } from '../../explorer/vci';
+import { TcbsExplorer } from '../../explorer/tcbs';
+import { SsiExplorer } from '../../explorer/ssi';
 import { ApiResponse, PaginationParams } from '../../types/api';
 import { StockListing } from '../../types/models';
 import { getLogger } from '../../core/utils/logger';
@@ -90,7 +90,7 @@ export class ListingModule {
     if (this.explorer instanceof VciExplorer) {
       return this.explorer.getFilteredListing(exchange, undefined, params);
     } else if (this.explorer instanceof SsiExplorer) {
-      return this.explorer.getFilteredListing(exchange, params);
+      return this.explorer.getFilteredListing(exchange, undefined, params);
     } else if (this.explorer instanceof TcbsExplorer) {
       return this.explorer.getFilteredListing(exchange, undefined, params);
     }

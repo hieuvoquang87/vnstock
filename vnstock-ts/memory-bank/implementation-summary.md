@@ -156,3 +156,78 @@ vnstock-ts/
 - [ ] Performance optimizations
 - [ ] Cache management
 - [ ] Extended documentation
+
+## Project Structure Reorganization
+
+The project structure has been reorganized to better align with the specifications in `project-structure.md`. The following changes have been made:
+
+1. Moved explorers to a top-level `src/explorer/` directory
+2. Split monolithic explorer classes into specialized modules (e.g., `quote.ts`, `company.ts`, etc.)
+3. Ensured consistent file naming with kebab-case
+4. Relocated the main Vnstock class to `src/common/vnstock.ts`
+5. Created placeholder files for planned modules, including:
+   - Utility modules
+   - Converter modules
+   - Explorer modules
+   - Plot utilities
+   - API connector modules
+   - Bot building functionality
+
+Current status:
+
+- Reorganization is in progress
+- Completed steps:
+  - Created directories for the new structure
+  - Moved the main Vnstock class
+  - Updated import paths
+  - Fixed VCI API endpoints to match the original Python implementation
+- Next steps:
+  - Split explorer classes into specialized modules
+  - Implement the functionality for all placeholder files
+  - Update the main entry point
+
+## API Endpoints Fix
+
+A critical issue was identified with the VCI API endpoints that was causing 404 errors. The problem was fixed by:
+
+1. Completely overhauling the API endpoints to match the original Python implementation:
+   - Trading URL: `https://trading.vietcap.com.vn/api`
+   - Market URL: `https://mt.vietcap.com.vn/api`
+   - GraphQL URL: `https://api.vietcap.com.vn/data-mt/graphql`
+2. Updating endpoint paths to match the specific API:
+   - Quote: `/price/symbols/getList`
+   - History: `/chart/OHLCChart/gap`
+   - Intraday: `/market-watch/LEData/getAll`
+3. Changing HTTP methods from GET to POST for several endpoints
+4. Fixing the payload format to match what the API expects:
+   - For stock quotes: `{ symbols: [symbol] }`
+   - For history data: `{ timeFrame, symbols, from, to }`
+   - For intraday data: `{ symbol, limit, truncTime }`
+5. Updating type definitions to include new parameters needed by the API
+
+These changes have successfully resolved the API connectivity issues, and we can now retrieve quote data for individual stocks. Some API endpoints may still have rate limiting or additional authentication requirements that need to be addressed.
+
+## Current Status
+
+The implementation currently has:
+
+1. Working API connection to VCI data source
+2. Successfully fetches quote data for individual stocks
+3. Base explorer class structure for consistent API interactions
+4. Type definitions for all data structures
+5. Proper error handling for API requests
+
+## Next Steps
+
+1. Implement remaining explorers (VND, MSN, FMarket)
+2. Complete specialized modules for different data types
+3. Implement utility functions for data analysis
+4. Create visualization utilities
+5. Add comprehensive tests and error handling for API issues
+6. Complete documentation and examples
+
+## Known Issues
+
+1. Multiple stock quotes request sometimes returns 503 Service Unavailable (likely due to rate limiting)
+2. Some API endpoints may require additional headers or authentication parameters
+3. Need to implement proper error handling for these API-specific errors

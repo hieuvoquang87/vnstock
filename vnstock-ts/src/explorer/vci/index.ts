@@ -6,12 +6,23 @@
 // Export constants
 export * from './const';
 
+// Export specific models from models.ts to avoid conflicts
+export { Ticker } from './models';
+
+// Export the VciExplorer class and Quote class
+export { VciExplorer, Quote } from './quote';
+
 // Export financial functions
 export * from './financial';
 
-// Note: Additional exports will be added as modules are implemented:
-// export * from './models';
-// export * from './quote';
-// export * from './company';
-// export * from './trading';
-// export * from './listing';
+// Export company functions
+export { CompanyProfile } from './company';
+
+// Export trading functions
+export * from './trading';
+
+// Export listing functions
+export { Listing } from './listing';
+
+// Export placeholder for now
+export const placeholder = 'VCI Explorer Placeholder';

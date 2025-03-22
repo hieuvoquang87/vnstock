@@ -27,8 +27,457 @@ import {
   _INTRADAY_DTYPE,
   _INDEX_MAPPING,
 } from './const';
+import { BaseExplorer } from '../base';
+import { ApiResponse, PaginationParams } from '../../types/api';
+import { DataSource } from '../../types/config';
+import { StockListing } from '../../types/models';
+import { Listing } from './listing';
+import { Company, CompanyProfile } from './company';
 
 const logger = getLogger('vnstock.explorer.vci.quote');
+
+/**
+ * VCI Explorer class for stock data
+ */
+export class VciExplorer extends BaseExplorer {
+  /**
+   * Constructor
+   */
+  constructor() {
+    super(DataSource.VCI);
+    this.setHeaders({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    });
+  }
+
+  /**
+   * Get all stock listings
+   *
+   * @param params Pagination parameters
+   * @returns Promise resolving to stock listing data
+   */
+  async getListing(
+    params?: PaginationParams
+  ): Promise<ApiResponse<StockListing[]>> {
+    const listing = new Listing();
+    try {
+      const data = await listing.getStocks(params?.limit);
+      return {
+        data,
+        status: 'success',
+        message: undefined,
+      };
+    } catch (error) {
+      return {
+        data: [],
+        status: 'error',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  /**
+   * Get filtered stock listings
+   *
+   * @param exchange Exchange to filter by
+   * @param industry Industry to filter by
+   * @param params Pagination parameters
+   * @returns Promise resolving to filtered stock listing data
+   */
+  async getFilteredListing(
+    exchange?: string,
+    industry?: string | number,
+    params?: PaginationParams
+  ): Promise<ApiResponse<StockListing[]>> {
+    const listing = new Listing();
+    try {
+      let data: StockListing[] = [];
+
+      if (exchange && industry) {
+        data = await listing.getStocksByExchangeAndIndustry(
+          exchange,
+          industry,
+          params?.limit
+        );
+      } else if (exchange) {
+        data = await listing.getStocksByExchange(exchange, params?.limit);
+      } else if (industry) {
+        data = await listing.getStocksByIndustry(industry, params?.limit);
+      } else {
+        data = await listing.getStocks(params?.limit);
+      }
+
+      return {
+        data,
+        status: 'success',
+        message: undefined,
+      };
+    } catch (error) {
+      return {
+        data: [],
+        status: 'error',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  /**
+   * Get real-time quote for a stock symbol
+   *
+   * @param symbol Stock symbol (e.g., VNM)
+   * @returns Promise resolving to quote data
+   */
+  async getQuote(symbol: string): Promise<ApiResponse<any>> {
+    this.validateSymbol(symbol);
+
+    // Create Quote instance for this symbol
+    // The Quote class is defined in this file
+    const quote = new Quote(symbol);
+
+    try {
+      // Use existing Quote class implementation
+      const intradayData = await quote.intraday(1);
+
+      if (Array.isArray(intradayData) && intradayData.length > 0) {
+        return {
+          data: intradayData[0],
+          status: 'success',
+          message: undefined,
+        };
+      }
+
+      return {
+        data: null,
+        status: 'error',
+        message: 'No quote data available',
+      };
+    } catch (error) {
+      return {
+        data: null,
+        status: 'error',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  /**
+   * Get quotes for multiple stock symbols
+   *
+   * @param symbols Array of stock symbols
+   * @returns Promise resolving to an array of quotes
+   */
+  async getQuotes(symbols: string[]): Promise<ApiResponse<any[]>> {
+    if (!symbols.length) {
+      throw new Error('At least one symbol must be provided');
+    }
+
+    try {
+      const quotesPromises = symbols.map((symbol) => this.getQuote(symbol));
+      const quotes = await Promise.all(quotesPromises);
+
+      // Extract the data from successful quotes
+      const successfulQuotes = quotes
+        .filter((quote) => quote.status === 'success' && quote.data)
+        .map((quote) => quote.data);
+
+      return {
+        data: successfulQuotes,
+        status: 'success',
+        message: undefined,
+      };
+    } catch (error) {
+      return {
+        data: [],
+        status: 'error',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  /**
+   * Get historical OHLC data for a stock symbol
+   *
+   * @param symbol Stock symbol (e.g., VNM)
+   * @param fromDate Start date (YYYY-MM-DD)
+   * @param toDate End date (YYYY-MM-DD)
+   * @param resolution Time resolution (e.g., '1D' for daily)
+   * @returns Promise resolving to historical OHLC data
+   */
+  async getHistoricalOHLC(
+    symbol: string,
+    fromDate: string,
+    toDate: string,
+    resolution: string = '1D'
+  ): Promise<ApiResponse<Array<any>>> {
+    this.validateSymbol(symbol);
+
+    // Create Quote instance for this symbol
+    // The Quote class is defined in this file
+    const quote = new Quote(symbol);
+
+    try {
+      // Use resolution to determine which method to call
+      let data: any[] = [];
+      if (resolution === '1D') {
+        const result = await quote.history(fromDate, toDate, resolution, false);
+        if (Array.isArray(result)) {
+          data = result;
+        }
+      } else {
+        // For intraday data, convert resolution to minutes
+        const minutes = resolution.toLowerCase().includes('m')
+          ? parseInt(resolution)
+          : resolution.toLowerCase().includes('h')
+          ? parseInt(resolution) * 60
+          : 1;
+        const result = await quote.intraday(minutes, null, false);
+        if (Array.isArray(result)) {
+          data = result;
+        }
+      }
+
+      return {
+        data,
+        status: 'success',
+        message: undefined,
+      };
+    } catch (error) {
+      return {
+        data: [],
+        status: 'error',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  /**
+   * Get intraday price data for a stock symbol
+   *
+   * @param symbol Stock symbol (e.g., VNM)
+   * @param resolution Time resolution in minutes (e.g., 1, 5, 15, 60)
+   * @param fromDate Optional start date (YYYY-MM-DD)
+   * @param toDate Optional end date (YYYY-MM-DD)
+   * @returns Promise resolving to intraday price data
+   */
+  async getIntraday(
+    symbol: string,
+    resolution: number = 1,
+    fromDate?: string,
+    toDate?: string
+  ): Promise<ApiResponse<Array<any>>> {
+    this.validateSymbol(symbol);
+
+    // Create Quote instance for this symbol
+    // The Quote class is defined in this file
+    const quote = new Quote(symbol);
+
+    try {
+      // The intraday method parameters are different from what we expected
+      // It takes pageSize, lastTime, toJson, showLog
+      const result = await quote.intraday(resolution, null, false);
+      let data: any[] = [];
+
+      if (Array.isArray(result)) {
+        data = result;
+      }
+
+      return {
+        data,
+        status: 'success',
+        message: undefined,
+      };
+    } catch (error) {
+      return {
+        data: [],
+        status: 'error',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  /**
+   * Get company profile information
+   *
+   * @param symbol Stock symbol (e.g., VNM)
+   * @returns Promise resolving to company profile data
+   */
+  async getCompanyProfile(symbol: string): Promise<ApiResponse<any>> {
+    this.validateSymbol(symbol);
+
+    // Create Company instance for this symbol
+    const company = new Company(symbol);
+
+    try {
+      // Use existing Company class implementation
+      const profileData = await company.profile();
+
+      return {
+        data: profileData,
+        status: 'success',
+        message: undefined,
+      };
+    } catch (error) {
+      return {
+        data: null,
+        status: 'error',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  /**
+   * Get ownership structure information
+   *
+   * @param symbol Stock symbol (e.g., VNM)
+   * @returns Promise resolving to ownership data
+   */
+  async getOwnership(symbol: string): Promise<ApiResponse<any>> {
+    this.validateSymbol(symbol);
+
+    // Create Company instance for this symbol
+    const company = new Company(symbol);
+
+    try {
+      // Use existing Company class implementation
+      const shareholdersData = await company.shareholders();
+
+      return {
+        data: {
+          majorShareholders: shareholdersData,
+          ownershipSummary: {}, // VCI doesn't provide ownership summary
+        },
+        status: 'success',
+        message: undefined,
+      };
+    } catch (error) {
+      return {
+        data: null,
+        status: 'error',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  /**
+   * Get company financial statements
+   *
+   * @param symbol Stock symbol (e.g., VNM)
+   * @param statementType Type of statement (income_statement, balance_sheet, cash_flow)
+   * @param period Reporting period (quarterly, yearly)
+   * @param limit Number of periods to return
+   * @returns Promise resolving to financial statement data
+   */
+  async getFinancialStatements(
+    symbol: string,
+    statementType: string,
+    period: string,
+    limit: number
+  ): Promise<ApiResponse<any>> {
+    this.validateSymbol(symbol);
+
+    // Import from financial.ts module
+    const { getFinancialStatement } = require('./financial');
+
+    try {
+      // Use existing getFinancialStatement function
+      const data = await getFinancialStatement(
+        symbol,
+        statementType,
+        period === 'quarterly' ? 'quarter' : 'year'
+      );
+
+      return {
+        data: {
+          symbol,
+          statementType,
+          period,
+          items: data || [],
+          periods: data ? data.map((item: any) => item.period) : [],
+        },
+        status: data ? 'success' : 'error',
+        message: data
+          ? undefined
+          : 'Failed to retrieve financial statement data',
+      };
+    } catch (error) {
+      return {
+        data: {
+          symbol,
+          statementType,
+          period,
+          items: [],
+          periods: [],
+        },
+        status: 'error',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  /**
+   * Get company financial ratios
+   *
+   * @param symbol Stock symbol (e.g., VNM)
+   * @param period Reporting period (quarterly, yearly)
+   * @param limit Number of periods to return
+   * @returns Promise resolving to financial ratios data
+   */
+  async getFinancialRatios(
+    symbol: string,
+    period: string,
+    limit: number
+  ): Promise<ApiResponse<any>> {
+    this.validateSymbol(symbol);
+
+    // Import from financial.ts module
+    const { getFinancialIndicator } = require('./financial');
+
+    try {
+      // Use existing getFinancialIndicator function
+      const data = await getFinancialIndicator(symbol, period === 'yearly');
+
+      // Limit the number of periods if needed
+      const limitedData = limit > 0 && data ? data.slice(0, limit) : data;
+
+      return {
+        data: {
+          symbol,
+          period,
+          items: limitedData || [],
+          periods: limitedData
+            ? limitedData.map((item: any) => item.period)
+            : [],
+        },
+        status: data ? 'success' : 'error',
+        message: data ? undefined : 'Failed to retrieve financial ratios data',
+      };
+    } catch (error) {
+      return {
+        data: {
+          symbol,
+          period,
+          items: [],
+          periods: [],
+        },
+        status: 'error',
+        message: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+
+  /**
+   * Validate stock symbol format
+   *
+   * @param symbol Stock symbol to validate
+   * @throws Error if symbol is invalid
+   */
+  private validateSymbol(symbol: string): void {
+    if (!symbol || typeof symbol !== 'string' || symbol.length < 3) {
+      throw new Error(`Invalid stock symbol: ${symbol}`);
+    }
+  }
+}
 
 export class Quote {
   private symbol: string;
