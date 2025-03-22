@@ -1,606 +1,491 @@
-# FMARKET Fund Data Implementation
+# Implementation of Funds Module
 
 ## Overview
 
-This document details the implementation of the FMARKET fund data functionality in the vnstock TypeScript library. The FMARKET explorer provides comprehensive access to mutual fund data in Vietnam, including fund lists, details, NAV history, performance metrics, and asset allocation information.
+The Funds Module provides comprehensive access to mutual fund data in the Vietnamese financial market. This module enables users to retrieve information about fund performance, holdings, asset allocations, and NAV history for investment and analysis purposes.
 
-## API Endpoints
+The module enables users to:
 
-The following FMARKET API endpoints are used to retrieve fund data:
+1. Access a comprehensive list of mutual funds available in the Vietnamese market
+2. Filter funds by type (Balanced, Bond, Stock) or by specific criteria
+3. Retrieve detailed fund information including performance metrics and NAV history
+4. Analyze fund holdings by asset types, industries, and top securities
+5. Track fund performance across different time periods (1M, 3M, 6M, 12M, etc.)
+6. Compare multiple funds based on various performance metrics
 
-| Endpoint                                               | Method | Description                                  |
-| ------------------------------------------------------ | ------ | -------------------------------------------- |
-| `https://api.fmarket.vn/data/funds`                    | GET    | List all funds with optional filtering       |
-| `https://api.fmarket.vn/data/fund/:symbol`             | GET    | Get detailed information for a specific fund |
-| `https://api.fmarket.vn/data/fund/:symbol/navs`        | GET    | Get NAV history for a specific fund          |
-| `https://api.fmarket.vn/data/fund/:symbol/performance` | GET    | Get performance metrics for a specific fund  |
-| `https://api.fmarket.vn/data/fund/:symbol/allocation`  | GET    | Get asset allocation for a specific fund     |
-| `https://api.fmarket.vn/data/categories`               | GET    | Get list of fund categories                  |
-| `https://api.fmarket.vn/data/companies`                | GET    | Get list of fund management companies        |
+## Component Structure
 
-## Data Structures
+The Funds Module is primarily organized around the `Fund` class and its nested `FundDetails` class:
 
-### Fund Data Response
-
-```typescript
-interface FundData {
-  symbol: string;
-  name: string;
-  shortName: string;
-  companyId: string;
-  companyName: string;
-  categoryId: string;
-  categoryName: string;
-  currency: string;
-  initialNav: number;
-  currentNav: number;
-  navDate: string;
-  inceptionDate: string;
-  description: string;
-  investmentObjective: string;
-  riskLevel: number;
-  minInvestment: number;
-  managementFee: number;
-  subscriptionFee: number;
-  redemptionFee: number;
-  status: string;
-  aum: number; // Assets Under Management
-  isin: string;
-  website: string;
-}
+```
+Fund
+├── Listing & Filtering Methods
+│   ├── listing() - Get list of all funds
+│   └── filter() - Filter funds by criteria
+│
+├── Fund Analysis Methods
+│   ├── top_holding() - Get top holdings in a fund
+│   ├── industry_holding() - Get industry allocation
+│   ├── asset_holding() - Get asset type allocation
+│   └── nav_report() - Get NAV history and performance
+│
+└── FundDetails - Nested class for detailed fund information
+    ├── top_holding() - Get top holdings by fund symbol
+    ├── industry_holding() - Get industry allocation by fund symbol
+    ├── asset_holding() - Get asset type allocation by fund symbol
+    └── nav_report() - Get NAV history by fund symbol
 ```
 
-### NAV History Response
+## Python Implementation
 
-```typescript
-interface NavHistoryData {
-  date: string;
-  nav: number;
-  change: number;
-  changePercent: number;
-}
+### Fund Class
 
-interface NavHistoryResponse {
-  symbol: string;
-  data: NavHistoryData[];
-}
+The `Fund` class is the main entry point for accessing mutual fund data:
+
+```python
+class Fund(BaseComponent):
+    SUPPORTED_SOURCES = ["FMARKET"]
+
+    def __init__(self, source: str = "FMARKET", random_agent: bool = False):
+        super().__init__(source=source)
+        self.random_agent = random_agent
+        self.details = self.data_source.details
+
+    def _load_data_source(self):
+        module = importlib.import_module(self.source_module)
+        return module.Fund(self.random_agent)
 ```
 
-### Performance Response
+### FMARKET Fund Implementation
 
-```typescript
-interface PerformanceData {
-  period: string; // '1M', '3M', '6M', 'YTD', '1Y', '3Y', '5Y', 'SI'
-  return: number;
-  benchmarkReturn?: number;
-  excessReturn?: number;
-}
+The implementation of the `Fund` class for the FMARKET data source:
 
-interface PerformanceResponse {
-  symbol: string;
-  benchmark?: string;
-  data: PerformanceData[];
-}
-```
+```python
+class Fund:
+    def __init__(self, random_agent: bool = False) -> None:
+        """
+        Initialize an object to access data from Fmarket.
+        """
+        self.data_source = "fmarket"
+        self.headers = get_headers(data_source=self.data_source, random_agent=random_agent)
+        self.base_url = _BASE_URL
+        self.fund_list = self.listing()['short_name'].to_list()
+        self.details = self.FundDetails(self)
 
-### Asset Allocation Response
+    @optimize_execution("fmarket")
+    def listing(self, fund_type: str = "") -> pd.DataFrame:
+        """
+        Retrieve the list of all open-ended funds available on Fmarket through API. View directly at https://fmarket.vn
 
-```typescript
-interface AssetAllocationItem {
-  type: string;
-  percentage: number;
-}
+        Parameters:
+        ----------
+            fund_type (str): Type of fund to filter. Default is empty to get all funds. Valid fund types include: 'BALANCED', 'BOND', 'STOCK'
 
-interface AssetAllocationResponse {
-  symbol: string;
-  date: string;
-  data: AssetAllocationItem[];
-}
-```
+        Returns:
+        -------
+            pd.DataFrame: DataFrame containing information of all open-ended funds available on Fmarket.
+        """
+        fund_type = fund_type.upper()
+        fundAssetTypes = _FUND_TYPE_MAPPING.get(fund_type, [])
 
-## Implementation
+        if fund_type not in {"", "BALANCED", "BOND", "STOCK"}:
+            logger.warning(f"Unsupported fund type: '{fund_type}'. Please choose from: '' to get all funds or specify one of 'BALANCED', 'BOND', or 'STOCK'.")
 
-### FmarketExplorer Class
-
-```typescript
-import axios from 'axios';
-import {
-  FMARKET_API_ENDPOINTS,
-  FundCategory,
-  FundPerformancePeriod,
-  FMARKET_DEFAULT_HISTORY_DAYS,
-  FMARKET_DEFAULT_TIMEOUT,
-} from './const';
-
-/**
- * Explorer for accessing FMARKET mutual fund data
- */
-export class FmarketExplorer {
-  private timeout: number;
-
-  /**
-   * Creates a new FmarketExplorer instance
-   * @param timeout Request timeout in milliseconds
-   */
-  constructor(timeout: number = FMARKET_DEFAULT_TIMEOUT) {
-    this.timeout = timeout;
-  }
-
-  /**
-   * Gets a list of all mutual funds
-   * @param category Optional category filter
-   * @returns List of funds
-   */
-  async getFundList(category?: FundCategory): Promise<FundData[]> {
-    const url = FMARKET_API_ENDPOINTS.FUNDS;
-    const params = category ? { category } : {};
-
-    try {
-      const response = await axios.get(url, {
-        params,
-        timeout: this.timeout,
-      });
-      return response.data;
-    } catch (error) {
-      this.handleError(error, 'Error fetching fund list');
-      return [];
-    }
-  }
-
-  /**
-   * Gets detailed information for a specific fund
-   * @param symbol Fund symbol
-   * @returns Fund details
-   */
-  async getFundDetails(symbol: string): Promise<FundData | null> {
-    const url = FMARKET_API_ENDPOINTS.FUND_DETAIL(symbol);
-
-    try {
-      const response = await axios.get(url, {
-        timeout: this.timeout,
-      });
-      return response.data;
-    } catch (error) {
-      this.handleError(error, `Error fetching details for fund ${symbol}`);
-      return null;
-    }
-  }
-
-  /**
-   * Gets NAV history for a specific fund
-   * @param symbol Fund symbol
-   * @param days Number of days of history to retrieve
-   * @returns NAV history data
-   */
-  async getFundNavHistory(
-    symbol: string,
-    days: number = FMARKET_DEFAULT_HISTORY_DAYS
-  ): Promise<NavHistoryResponse | null> {
-    const url = FMARKET_API_ENDPOINTS.FUND_NAV(symbol);
-
-    try {
-      const response = await axios.get(url, {
-        params: { days },
-        timeout: this.timeout,
-      });
-      return {
-        symbol,
-        data: response.data,
-      };
-    } catch (error) {
-      this.handleError(error, `Error fetching NAV history for fund ${symbol}`);
-      return null;
-    }
-  }
-
-  /**
-   * Gets performance metrics for a specific fund
-   * @param symbol Fund symbol
-   * @param period Performance period
-   * @returns Performance data
-   */
-  async getFundPerformance(
-    symbol: string,
-    period?: FundPerformancePeriod
-  ): Promise<PerformanceResponse | null> {
-    const url = FMARKET_API_ENDPOINTS.FUND_DETAIL(symbol) + '/performance';
-    const params = period ? { period } : {};
-
-    try {
-      const response = await axios.get(url, {
-        params,
-        timeout: this.timeout,
-      });
-      return {
-        symbol,
-        benchmark: response.data.benchmark,
-        data: response.data.performance,
-      };
-    } catch (error) {
-      this.handleError(error, `Error fetching performance for fund ${symbol}`);
-      return null;
-    }
-  }
-
-  /**
-   * Gets asset allocation for a specific fund
-   * @param symbol Fund symbol
-   * @returns Asset allocation data
-   */
-  async getFundAssetAllocation(
-    symbol: string
-  ): Promise<AssetAllocationResponse | null> {
-    const url = FMARKET_API_ENDPOINTS.FUND_DETAIL(symbol) + '/allocation';
-
-    try {
-      const response = await axios.get(url, {
-        timeout: this.timeout,
-      });
-      return {
-        symbol,
-        date: response.data.date,
-        data: response.data.allocation,
-      };
-    } catch (error) {
-      this.handleError(
-        error,
-        `Error fetching asset allocation for fund ${symbol}`
-      );
-      return null;
-    }
-  }
-
-  /**
-   * Gets a list of fund categories
-   * @returns List of categories
-   */
-  async getFundCategories(): Promise<{ id: string; name: string }[]> {
-    const url = FMARKET_API_ENDPOINTS.CATEGORIES;
-
-    try {
-      const response = await axios.get(url, {
-        timeout: this.timeout,
-      });
-      return response.data;
-    } catch (error) {
-      this.handleError(error, 'Error fetching fund categories');
-      return [];
-    }
-  }
-
-  /**
-   * Gets a list of fund management companies
-   * @returns List of companies
-   */
-  async getFundCompanies(): Promise<
-    { id: string; name: string; website: string }[]
-  > {
-    const url = FMARKET_API_ENDPOINTS.COMPANIES;
-
-    try {
-      const response = await axios.get(url, {
-        timeout: this.timeout,
-      });
-      return response.data;
-    } catch (error) {
-      this.handleError(error, 'Error fetching fund companies');
-      return [];
-    }
-  }
-
-  /**
-   * Gets the best performing funds for a given period
-   * @param period Performance period
-   * @param limit Number of funds to return
-   * @param category Optional category filter
-   * @returns List of top performing funds
-   */
-  async getTopPerformingFunds(
-    period: FundPerformancePeriod = FundPerformancePeriod.ONE_YEAR,
-    limit: number = 10,
-    category?: FundCategory
-  ): Promise<{ symbol: string; name: string; return: number }[]> {
-    // First get all funds (optionally filtered by category)
-    const funds = await this.getFundList(category);
-
-    // Then get performance for each fund
-    const performancePromises = funds.map((fund) =>
-      this.getFundPerformance(fund.symbol, period)
-    );
-
-    try {
-      const results = await Promise.all(performancePromises);
-
-      // Filter out null results, extract the data we need, sort by return
-      const performanceData = results
-        .filter((result): result is PerformanceResponse => result !== null)
-        .map((result) => {
-          const periodData = result.data.find((d) => d.period === period);
-          return {
-            symbol: result.symbol,
-            name: funds.find((f) => f.symbol === result.symbol)?.name || '',
-            return: periodData ? periodData.return : 0,
-          };
-        })
-        .sort((a, b) => b.return - a.return)
-        .slice(0, limit);
-
-      return performanceData;
-    } catch (error) {
-      this.handleError(
-        error,
-        `Error getting top performing funds for period ${period}`
-      );
-      return [];
-    }
-  }
-
-  /**
-   * Compares the performance of multiple funds
-   * @param symbols Array of fund symbols to compare
-   * @param periods Array of performance periods to include
-   * @returns Comparison data for the specified funds
-   */
-  async compareFunds(
-    symbols: string[],
-    periods: FundPerformancePeriod[] = [
-      FundPerformancePeriod.ONE_MONTH,
-      FundPerformancePeriod.THREE_MONTH,
-      FundPerformancePeriod.ONE_YEAR,
-      FundPerformancePeriod.THREE_YEAR,
-    ]
-  ): Promise<
-    {
-      symbol: string;
-      name: string;
-      performance: { period: string; return: number }[];
-    }[]
-  > {
-    if (!symbols.length) {
-      return [];
-    }
-
-    try {
-      // Get fund details and performance for each symbol
-      const detailsPromises = symbols.map((symbol) =>
-        this.getFundDetails(symbol)
-      );
-      const performancePromises = symbols.map((symbol) =>
-        this.getFundPerformance(symbol)
-      );
-
-      const [detailsResults, performanceResults] = await Promise.all([
-        Promise.all(detailsPromises),
-        Promise.all(performancePromises),
-      ]);
-
-      // Build comparison result
-      return symbols.map((symbol, index) => {
-        const details = detailsResults[index];
-        const performance = performanceResults[index];
-
-        if (!details || !performance) {
-          return {
-            symbol,
-            name: '',
-            performance: [],
-          };
+        # API call
+        payload = {
+            "types": ["NEW_FUND", "TRADING_FUND"],
+            "issuerIds": [],
+            "sortOrder": "DESC",
+            "sortField": "navTo6Months",
+            "page": 1,
+            "pageSize": 100,
+            "isIpo": False,
+            "fundAssetTypes": fundAssetTypes,
+            "bondRemainPeriods": [],
+            "searchField": "",
+            "isBuyByReward": False,
+            "thirdAppIds": [],
         }
+        url = f"{_BASE_URL}/filter"
 
-        // Filter performance data to requested periods
-        const filteredPerformance = performance.data
-          .filter((p) => periods.includes(p.period as FundPerformancePeriod))
-          .map((p) => ({
-            period: p.period,
-            return: p.return,
-          }));
+        # Make request and process response
+        # ...
 
-        return {
-          symbol,
-          name: details.name,
-          performance: filteredPerformance,
-        };
-      });
-    } catch (error) {
-      this.handleError(error, 'Error comparing funds');
-      return [];
-    }
-  }
+        return df
 
-  /**
-   * Calculates NAV returns over specific periods
-   * @param symbol Fund symbol
-   * @param navHistory NAV history data (optional, will be fetched if not provided)
-   * @returns Calculated returns for various periods
-   */
-  async calculateNavReturns(
-    symbol: string,
-    navHistory?: NavHistoryData[]
-  ): Promise<{ period: string; return: number }[]> {
-    try {
-      // If NAV history is not provided, fetch it
-      if (!navHistory) {
-        const historyResponse = await this.getFundNavHistory(symbol);
-        if (!historyResponse) {
-          return [];
+    @optimize_execution("fmarket")
+    def filter(self, symbol: str = "") -> pd.DataFrame:
+        """
+        Retrieve the list of funds by short name (symbol) and fund id. Default is empty to list all funds.
+
+        Parameters:
+        ----------
+            symbol (str): Short name of the fund to search for. Default is empty to get all funds.
+
+        Returns:
+        -------
+            pd.DataFrame: DataFrame containing information of the searched fund.
+        """
+        symbol = symbol.upper()
+
+        payload = {
+            "searchField": symbol,
+            "types": ["NEW_FUND", "TRADING_FUND"],
+            "pageSize": 100,
         }
-        navHistory = historyResponse.data;
+        url = f"{_BASE_URL}/filter"
+
+        # Make request and process response
+        # ...
+
+        return df
+
+    @optimize_execution("fmarket")
+    def top_holding(self, fundId: int = 23) -> pd.DataFrame:
+        """
+        Retrieve list of top 10 holdings in the specified fund. Live data is retrieved from the Fmarket API.
+
+        Parameters
+        ----------
+            fundId : int
+                id of a fund in fmarket database
+        Returns
+        -------
+            df : pd.DataFrame
+                DataFrame of the current top 10 holdings of the selected fund.
+        """
+        url = f"{_BASE_URL}/{fundId}"
+
+        # Make request and process response
+        # ...
+
+        return df
+
+    @optimize_execution("fmarket")
+    def industry_holding(self, fundId: int = 23) -> pd.DataFrame:
+        """
+        Retrieve industry allocation for specified fund. Live data is retrieved from the Fmarket API.
+
+        Parameters
+        ----------
+            fundId : int
+                id of a fund in fmarket database
+        Returns
+        -------
+            df : pd.DataFrame
+                DataFrame of industry allocation of the selected fund.
+        """
+        url = f"{_BASE_URL}/{fundId}"
+
+        # Make request and process response
+        # ...
+
+        return df
+
+    @optimize_execution("fmarket")
+    def nav_report(self, fundId: int = 23) -> pd.DataFrame:
+        """
+        Retrieve NAV history for specified fund. Live data is retrieved from the Fmarket API.
+
+        Parameters
+        ----------
+            fundId : int
+                id of a fund in fmarket database
+        Returns
+        -------
+            df : pd.DataFrame
+                DataFrame of NAV history of the selected fund.
+        """
+        url = f"{_BASE_URL}/{fundId}/nav-report"
+
+        # Make request and process response
+        # ...
+
+        return df
+
+    @optimize_execution("fmarket")
+    def asset_holding(self, fundId: int = 23) -> pd.DataFrame:
+        """
+        Retrieve list of assets holding allocation for specific fundID. Live data is retrieved from the Fmarket API.
+
+        Parameters
+        ----------
+            fundId : int
+                id of a fund in fmarket database.
+
+        Returns
+        -------
+            df : pd.DataFrame
+                DataFrame of assets holding allocation of the selected fund.
+        """
+        url = f"{_BASE_URL}/{fundId}"
+
+        # Make request and process response
+        # ...
+
+        return df
+```
+
+### FundDetails Nested Class
+
+The `FundDetails` nested class provides methods to access detailed information about specific funds using their symbols:
+
+```python
+class FundDetails:
+    def __init__(self, parent):
+        self.parent = parent
+
+    @optimize_execution("fmarket")
+    def top_holding(self, symbol="SSISCA") -> pd.DataFrame:
+        return self._get_fund_details(symbol, 'top_holding')
+
+    @optimize_execution("fmarket")
+    def industry_holding(self, symbol="SSISCA") -> pd.DataFrame:
+        return self._get_fund_details(symbol, 'industry_holding')
+
+    @optimize_execution("fmarket")
+    def nav_report(self, symbol="SSISCA") -> pd.DataFrame:
+        return self._get_fund_details(symbol, 'nav_report')
+
+    @optimize_execution("fmarket")
+    def asset_holding(self, symbol="SSISCA") -> pd.DataFrame:
+        return self._get_fund_details(symbol, 'asset_holding')
+
+    def _get_fund_details(self, symbol, section) -> pd.DataFrame:
+        """
+        Internal method to retrieve fund details for a specific section.
+
+        Parameters
+        ----------
+            symbol : str
+                ticker of a fund. A.k.a fund short name
+            section : str
+                section of data to retrieve. Options: 'top_holding', 'industry_holding', 'nav_report', 'asset_holding'
+
+        Returns
+        -------
+            df : pd.DataFrame
+                DataFrame of the current top holdings of the selected fund.
+        """
+        # validate "symbol" param input
+        symbol = symbol.upper()
+        if symbol not in self.parent.fund_list:
+            logger.error(f"Error: {symbol} is not a valid input. Call the listing() method for the list of valid Fund short_name.")
+            raise ValueError(f"Invalid symbol: {symbol}")
+        try:
+            # Lookup a valid "fundID" related to "symbol"
+            fundID = int(self.parent.filter(symbol)["id"][0])
+            logger.info(f"Retrieving data for {symbol}")
+        except Exception as e:
+            logger.error(f"An unexpected error occurred: {str(e)}")
+            raise
+
+        # validate "section" param input and call appropriate method
+        # ...
+
+        return df
+```
+
+## TypeScript Implementation
+
+### Fund Class
+
+The TypeScript implementation of the `Fund` class:
+
+```typescript
+export class Fund extends BaseComponent {
+  public static readonly SUPPORTED_SOURCES: string[] = ['FMARKET'];
+  public details: FundDetails;
+
+  constructor(
+    source: string = 'FMARKET',
+    options: { randomAgent?: boolean } = {}
+  ) {
+    super(null, source);
+
+    // Initialize details property after dataSource is loaded
+    this.details = new FundDetails(this);
+  }
+
+  protected loadDataSource(): any {
+    try {
+      if (this.source === 'FMARKET') {
+        return new FmarketFundAdapter(this.options?.randomAgent || false);
       }
 
-      if (!navHistory.length) {
-        return [];
-      }
-
-      // Sort by date, newest first
-      const sortedNav = [...navHistory].sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
-
-      const currentNav = sortedNav[0].nav;
-      const returns = [];
-
-      // Get dates for different periods
-      const today = new Date();
-      const oneMonthAgo = new Date(today);
-      oneMonthAgo.setMonth(today.getMonth() - 1);
-
-      const threeMonthsAgo = new Date(today);
-      threeMonthsAgo.setMonth(today.getMonth() - 3);
-
-      const sixMonthsAgo = new Date(today);
-      sixMonthsAgo.setMonth(today.getMonth() - 6);
-
-      const oneYearAgo = new Date(today);
-      oneYearAgo.setFullYear(today.getFullYear() - 1);
-
-      const threeYearsAgo = new Date(today);
-      threeYearsAgo.setFullYear(today.getFullYear() - 3);
-
-      const fiveYearsAgo = new Date(today);
-      fiveYearsAgo.setFullYear(today.getFullYear() - 5);
-
-      // YTD - beginning of current year
-      const ytdDate = new Date(today.getFullYear(), 0, 1);
-
-      // Find closest NAV dates to these periods
-      const findClosestNav = (targetDate: Date) => {
-        return sortedNav.reduce((closest, current) => {
-          const currentDate = new Date(current.date);
-          const closestDate = closest ? new Date(closest.date) : null;
-
-          if (!closestDate) return current;
-
-          const currentDiff = Math.abs(
-            currentDate.getTime() - targetDate.getTime()
-          );
-          const closestDiff = Math.abs(
-            closestDate.getTime() - targetDate.getTime()
-          );
-
-          return currentDiff < closestDiff ? current : closest;
-        }, null as NavHistoryData | null);
-      };
-
-      // Calculate returns for each period
-      const oneMonthNav = findClosestNav(oneMonthAgo);
-      if (oneMonthNav) {
-        returns.push({
-          period: FundPerformancePeriod.ONE_MONTH,
-          return: (currentNav / oneMonthNav.nav - 1) * 100,
-        });
-      }
-
-      const threeMonthNav = findClosestNav(threeMonthsAgo);
-      if (threeMonthNav) {
-        returns.push({
-          period: FundPerformancePeriod.THREE_MONTH,
-          return: (currentNav / threeMonthNav.nav - 1) * 100,
-        });
-      }
-
-      const sixMonthNav = findClosestNav(sixMonthsAgo);
-      if (sixMonthNav) {
-        returns.push({
-          period: FundPerformancePeriod.SIX_MONTH,
-          return: (currentNav / sixMonthNav.nav - 1) * 100,
-        });
-      }
-
-      const ytdNav = findClosestNav(ytdDate);
-      if (ytdNav) {
-        returns.push({
-          period: FundPerformancePeriod.YEAR_TO_DATE,
-          return: (currentNav / ytdNav.nav - 1) * 100,
-        });
-      }
-
-      const oneYearNav = findClosestNav(oneYearAgo);
-      if (oneYearNav) {
-        returns.push({
-          period: FundPerformancePeriod.ONE_YEAR,
-          return: (currentNav / oneYearNav.nav - 1) * 100,
-        });
-      }
-
-      const threeYearNav = findClosestNav(threeYearsAgo);
-      if (threeYearNav) {
-        const annualizedReturn =
-          Math.pow(currentNav / threeYearNav.nav, 1 / 3) - 1;
-        returns.push({
-          period: FundPerformancePeriod.THREE_YEAR,
-          return: annualizedReturn * 100,
-        });
-      }
-
-      const fiveYearNav = findClosestNav(fiveYearsAgo);
-      if (fiveYearNav) {
-        const annualizedReturn =
-          Math.pow(currentNav / fiveYearNav.nav, 1 / 5) - 1;
-        returns.push({
-          period: FundPerformancePeriod.FIVE_YEAR,
-          return: annualizedReturn * 100,
-        });
-      }
-
-      // Since inception - oldest NAV point
-      const oldestNav = sortedNav[sortedNav.length - 1];
-      const inceptionDate = new Date(oldestNav.date);
-      const years =
-        (today.getTime() - inceptionDate.getTime()) /
-        (1000 * 60 * 60 * 24 * 365.25);
-
-      if (years >= 1) {
-        const annualizedReturn =
-          Math.pow(currentNav / oldestNav.nav, 1 / years) - 1;
-        returns.push({
-          period: FundPerformancePeriod.SINCE_INCEPTION,
-          return: annualizedReturn * 100,
-        });
-      } else {
-        returns.push({
-          period: FundPerformancePeriod.SINCE_INCEPTION,
-          return: (currentNav / oldestNav.nav - 1) * 100,
-        });
-      }
-
-      return returns;
+      throw new Error(`Unsupported data source: ${this.source}`);
     } catch (error) {
-      this.handleError(
-        error,
-        `Error calculating NAV returns for fund ${symbol}`
-      );
-      return [];
+      this.logger.error(`Failed to load Fund data source: ${error}`);
+      throw error;
     }
   }
 
   /**
-   * Handles API errors
-   * @param error Error object
-   * @param message Error message prefix
-   * @throws Enhanced error with contextual information
+   * Get a list of all funds
+   *
+   * @param options - Options for filtering funds
+   * @returns Promise resolving to a list of funds
    */
-  private handleError(error: any, message: string): void {
-    if (axios.isAxiosError(error)) {
-      const status = error.response?.status;
-      const responseData = error.response?.data;
+  public async listing(options: { fundType?: string } = {}): Promise<any> {
+    return await this.dataSource.listing(options);
+  }
 
-      // Enhance error message based on status code
-      switch (status) {
-        case 404:
-          throw new Error(`${message}: Fund not found`);
-        case 400:
-          throw new Error(
-            `${message}: ${responseData?.message || 'Bad request'}`
-          );
-        case 429:
-          throw new Error(`${message}: Rate limit exceeded. Try again later.`);
-        case 500:
-          throw new Error(`${message}: Server error. Please try again later.`);
+  /**
+   * Filter funds by symbol
+   *
+   * @param options - Filter options
+   * @returns Promise resolving to filtered funds list
+   */
+  public async filter(options: { symbol: string }): Promise<any> {
+    return await this.dataSource.filter(options);
+  }
+
+  /**
+   * Get top holdings for a fund
+   *
+   * @param options - Options specifying the fund ID
+   * @returns Promise resolving to top holdings data
+   */
+  public async topHolding(options: { fundId: number }): Promise<any> {
+    return await this.dataSource.topHolding(options);
+  }
+
+  /**
+   * Get industry allocation for a fund
+   *
+   * @param options - Options specifying the fund ID
+   * @returns Promise resolving to industry allocation data
+   */
+  public async industryHolding(options: { fundId: number }): Promise<any> {
+    return await this.dataSource.industryHolding(options);
+  }
+
+  /**
+   * Get NAV history for a fund
+   *
+   * @param options - Options specifying the fund ID
+   * @returns Promise resolving to NAV history data
+   */
+  public async navReport(options: { fundId: number }): Promise<any> {
+    return await this.dataSource.navReport(options);
+  }
+
+  /**
+   * Get asset allocation for a fund
+   *
+   * @param options - Options specifying the fund ID
+   * @returns Promise resolving to asset allocation data
+   */
+  public async assetHolding(options: { fundId: number }): Promise<any> {
+    return await this.dataSource.assetHolding(options);
+  }
+}
+```
+
+### FundDetails Class
+
+The TypeScript implementation of the `FundDetails` class:
+
+```typescript
+export class FundDetails {
+  private parent: Fund;
+
+  constructor(parent: Fund) {
+    this.parent = parent;
+  }
+
+  /**
+   * Get top holdings for a fund by symbol
+   *
+   * @param options - Options with the fund symbol
+   * @returns Promise resolving to top holdings data
+   */
+  public async topHolding(options: { symbol: string }): Promise<any> {
+    return await this.getFundDetails({
+      symbol: options.symbol,
+      section: 'topHolding',
+    });
+  }
+
+  /**
+   * Get industry allocation for a fund by symbol
+   *
+   * @param options - Options with the fund symbol
+   * @returns Promise resolving to industry allocation data
+   */
+  public async industryHolding(options: { symbol: string }): Promise<any> {
+    return await this.getFundDetails({
+      symbol: options.symbol,
+      section: 'industryHolding',
+    });
+  }
+
+  /**
+   * Get NAV history for a fund by symbol
+   *
+   * @param options - Options with the fund symbol
+   * @returns Promise resolving to NAV history data
+   */
+  public async navReport(options: { symbol: string }): Promise<any> {
+    return await this.getFundDetails({
+      symbol: options.symbol,
+      section: 'navReport',
+    });
+  }
+
+  /**
+   * Get asset allocation for a fund by symbol
+   *
+   * @param options - Options with the fund symbol
+   * @returns Promise resolving to asset allocation data
+   */
+  public async assetHolding(options: { symbol: string }): Promise<any> {
+    return await this.getFundDetails({
+      symbol: options.symbol,
+      section: 'assetHolding',
+    });
+  }
+
+  /**
+   * Internal method to get fund details by symbol and section
+   */
+  private async getFundDetails(options: {
+    symbol: string;
+    section: string;
+  }): Promise<any> {
+    const { symbol, section } = options;
+
+    try {
+      // Get fund ID from symbol
+      const fundsList = await this.parent.listing();
+      const fundInfo = fundsList.find(
+        (fund: any) => fund.short_name?.toUpperCase() === symbol.toUpperCase()
+      );
+
+      if (!fundInfo) {
+        throw new Error(
+          `Fund with symbol ${symbol} not found. Use listing() to see available funds.`
+        );
+      }
+
+      const fundId = fundInfo.fund_id_fmarket;
+
+      // Call appropriate method based on section
+      switch (section) {
+        case 'topHolding':
+          return await this.parent.topHolding({ fundId });
+        case 'industryHolding':
+          return await this.parent.industryHolding({ fundId });
+        case 'navReport':
+          return await this.parent.navReport({ fundId });
+        case 'assetHolding':
+          return await this.parent.assetHolding({ fundId });
         default:
-          throw new Error(`${message}: ${error.message}`);
+          throw new Error(`Invalid section: ${section}`);
       }
-    } else {
-      throw new Error(`${message}: ${error.message || 'Unknown error'}`);
+    } catch (error) {
+      console.error(`Error getting fund details: ${error}`);
+      throw error;
     }
   }
 }
@@ -608,235 +493,266 @@ export class FmarketExplorer {
 
 ## Usage Examples
 
-### Basic Usage
+### Python Examples
+
+#### Listing All Funds
+
+```python
+from vnstock.common.vnstock import Vnstock
+
+# Create a Vnstock instance and access fund components
+vnstock = Vnstock()
+fund = vnstock.fund()
+
+# Get all funds
+all_funds = fund.listing()
+print(f"Total funds: {len(all_funds)}")
+
+# Get only bond funds
+bond_funds = fund.listing(fund_type="BOND")
+print(f"Bond funds: {len(bond_funds)}")
+
+# Get only balanced funds
+balanced_funds = fund.listing(fund_type="BALANCED")
+print(f"Balanced funds: {len(balanced_funds)}")
+
+# Get only stock funds
+stock_funds = fund.listing(fund_type="STOCK")
+print(f"Stock funds: {len(stock_funds)}")
+```
+
+#### Getting Fund Details by Symbol
+
+```python
+from vnstock.common.vnstock import Vnstock
+
+# Create a Vnstock instance and access fund components
+vnstock = Vnstock()
+fund = vnstock.fund()
+
+# Get top holdings of a specific fund by symbol
+top_holdings = fund.details.top_holding(symbol="SSISCA")
+print(f"Top holdings of SSISCA fund: {len(top_holdings)} positions")
+
+# Get industry allocation of a specific fund
+industry_allocation = fund.details.industry_holding(symbol="SSISCA")
+print(f"Industry allocation of SSISCA fund: {len(industry_allocation)} sectors")
+
+# Get asset type allocation of a specific fund
+asset_allocation = fund.details.asset_holding(symbol="SSISCA")
+print(f"Asset allocation of SSISCA fund: {len(asset_allocation)} asset types")
+
+# Get NAV history of a specific fund
+nav_history = fund.details.nav_report(symbol="SSISCA")
+print(f"NAV history of SSISCA fund: {len(nav_history)} data points")
+```
+
+#### Filtering Funds
+
+```python
+from vnstock.common.vnstock import Vnstock
+
+# Create a Vnstock instance and access fund components
+vnstock = Vnstock()
+fund = vnstock.fund()
+
+# Filter funds by symbol
+ssi_funds = fund.filter(symbol="SSI")
+print(f"SSI funds: {len(ssi_funds)}")
+
+# Get fund ID from filter result to use with other methods
+fund_id = ssi_funds['id'][0]
+
+# Use fund_id directly with other methods
+top_holdings = fund.top_holding(fundId=fund_id)
+print(f"Top holdings: {len(top_holdings)} positions")
+```
+
+### TypeScript Examples
+
+#### Listing All Funds
 
 ```typescript
-import { FmarketExplorer } from 'vnstock';
-import { FundCategory, FundPerformancePeriod } from 'vnstock';
+import { Vnstock } from 'vnstock-ts';
 
-const main = async () => {
-  const explorer = new FmarketExplorer();
+async function listFunds() {
+  // Create a Vnstock instance and access fund components
+  const vnstock = new Vnstock();
+  const fund = vnstock.fund();
 
   // Get all funds
-  const allFunds = await explorer.getFundList();
-  console.log(`Found ${allFunds.length} funds`);
+  const allFunds = await fund.listing();
+  console.log(`Total funds: ${allFunds.length}`);
 
-  // Get equity funds only
-  const equityFunds = await explorer.getFundList(FundCategory.EQUITY);
-  console.log(`Found ${equityFunds.length} equity funds`);
+  // Get only bond funds
+  const bondFunds = await fund.listing({ fundType: 'BOND' });
+  console.log(`Bond funds: ${bondFunds.length}`);
 
-  // Get details for a specific fund
-  const fundDetails = await explorer.getFundDetails('VFMVF1');
-  console.log(`Fund name: ${fundDetails?.name}`);
+  // Get only balanced funds
+  const balancedFunds = await fund.listing({ fundType: 'BALANCED' });
+  console.log(`Balanced funds: ${balancedFunds.length}`);
+
+  // Get only stock funds
+  const stockFunds = await fund.listing({ fundType: 'STOCK' });
+  console.log(`Stock funds: ${stockFunds.length}`);
+}
+
+listFunds();
+```
+
+#### Getting Fund Details by Symbol
+
+```typescript
+import { Vnstock } from 'vnstock-ts';
+
+async function getFundDetails() {
+  // Create a Vnstock instance and access fund components
+  const vnstock = new Vnstock();
+  const fund = vnstock.fund();
+
+  // Get top holdings of a specific fund by symbol
+  const topHoldings = await fund.details.topHolding({ symbol: 'SSISCA' });
+  console.log(`Top holdings of SSISCA fund: ${topHoldings.length} positions`);
+
+  // Get industry allocation of a specific fund
+  const industryAllocation = await fund.details.industryHolding({
+    symbol: 'SSISCA',
+  });
   console.log(
-    `Current NAV: ${fundDetails?.currentNav} ${fundDetails?.currency}`
+    `Industry allocation of SSISCA fund: ${industryAllocation.length} sectors`
   );
 
-  // Get NAV history
-  const navHistory = await explorer.getFundNavHistory('VFMVF1', 90); // 90 days
-  console.log(`NAV history points: ${navHistory?.data.length}`);
-
-  // Get fund performance
-  const performance = await explorer.getFundPerformance('VFMVF1');
-  console.log('Performance:');
-  performance?.data.forEach((p) => {
-    console.log(`${p.period}: ${p.return.toFixed(2)}%`);
+  // Get asset type allocation of a specific fund
+  const assetAllocation = await fund.details.assetHolding({
+    symbol: 'SSISCA',
   });
-
-  // Get asset allocation
-  const allocation = await explorer.getFundAssetAllocation('VFMVF1');
-  console.log('Asset allocation:');
-  allocation?.data.forEach((a) => {
-    console.log(`${a.type}: ${a.percentage.toFixed(2)}%`);
-  });
-};
-
-main().catch(console.error);
-```
-
-### Advanced Usage Examples
-
-#### Find Top Performing Funds
-
-```typescript
-import { FmarketExplorer } from 'vnstock';
-import { FundPerformancePeriod, FundCategory } from 'vnstock';
-
-const findTopPerformers = async () => {
-  const explorer = new FmarketExplorer();
-
-  // Find top 5 equity funds over the past year
-  const topEquity = await explorer.getTopPerformingFunds(
-    FundPerformancePeriod.ONE_YEAR,
-    5,
-    FundCategory.EQUITY
-  );
-
-  console.log('Top 5 Equity Funds (1-Year Return):');
-  topEquity.forEach((fund, index) => {
-    console.log(
-      `${index + 1}. ${fund.symbol} - ${fund.name}: ${fund.return.toFixed(2)}%`
-    );
-  });
-
-  // Find top 5 bond funds over the past 3 years
-  const topBond = await explorer.getTopPerformingFunds(
-    FundPerformancePeriod.THREE_YEAR,
-    5,
-    FundCategory.BOND
-  );
-
-  console.log('\nTop 5 Bond Funds (3-Year Return):');
-  topBond.forEach((fund, index) => {
-    console.log(
-      `${index + 1}. ${fund.symbol} - ${fund.name}: ${fund.return.toFixed(2)}%`
-    );
-  });
-};
-
-findTopPerformers().catch(console.error);
-```
-
-#### Compare Multiple Funds
-
-```typescript
-import { FmarketExplorer } from 'vnstock';
-import { FundPerformancePeriod } from 'vnstock';
-
-const compareFunds = async () => {
-  const explorer = new FmarketExplorer();
-
-  // Compare 3 popular equity funds
-  const comparison = await explorer.compareFunds(
-    ['VFMVF1', 'DCBC', 'SSISCA'],
-    [
-      FundPerformancePeriod.ONE_MONTH,
-      FundPerformancePeriod.SIX_MONTH,
-      FundPerformancePeriod.ONE_YEAR,
-      FundPerformancePeriod.THREE_YEAR,
-    ]
-  );
-
-  // Create a table for comparison
-  console.log('Fund Comparison:');
-  console.log('-'.repeat(80));
-  console.log('Fund\t\t| 1M\t\t| 6M\t\t| 1Y\t\t| 3Y (ann.)');
-  console.log('-'.repeat(80));
-
-  comparison.forEach((fund) => {
-    const oneMonth = fund.performance.find(
-      (p) => p.period === FundPerformancePeriod.ONE_MONTH
-    );
-    const sixMonth = fund.performance.find(
-      (p) => p.period === FundPerformancePeriod.SIX_MONTH
-    );
-    const oneYear = fund.performance.find(
-      (p) => p.period === FundPerformancePeriod.ONE_YEAR
-    );
-    const threeYear = fund.performance.find(
-      (p) => p.period === FundPerformancePeriod.THREE_YEAR
-    );
-
-    console.log(
-      `${fund.symbol} (${fund.name.substring(0, 10)}...)\t| ` +
-        `${oneMonth ? oneMonth.return.toFixed(2) + '%' : 'N/A'}\t| ` +
-        `${sixMonth ? sixMonth.return.toFixed(2) + '%' : 'N/A'}\t| ` +
-        `${oneYear ? oneYear.return.toFixed(2) + '%' : 'N/A'}\t| ` +
-        `${threeYear ? threeYear.return.toFixed(2) + '%' : 'N/A'}`
-    );
-  });
-};
-
-compareFunds().catch(console.error);
-```
-
-#### Calculate Custom Return Metrics
-
-```typescript
-import { FmarketExplorer } from 'vnstock';
-
-const calculateCustomMetrics = async () => {
-  const explorer = new FmarketExplorer();
-  const symbol = 'VFMVF1';
-
-  // Get NAV history for the past 3 years
-  const navHistory = await explorer.getFundNavHistory(symbol, 365 * 3);
-  if (!navHistory || !navHistory.data.length) {
-    console.error('Could not fetch NAV history');
-    return;
-  }
-
-  // Sort by date, oldest first
-  const sortedNav = [...navHistory.data].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-  );
-
-  // Calculate volatility (standard deviation of daily returns)
-  const dailyReturns = [];
-  for (let i = 1; i < sortedNav.length; i++) {
-    const dailyReturn = sortedNav[i].nav / sortedNav[i - 1].nav - 1;
-    dailyReturns.push(dailyReturn);
-  }
-
-  const avgDailyReturn =
-    dailyReturns.reduce((sum, r) => sum + r, 0) / dailyReturns.length;
-  const variance =
-    dailyReturns.reduce((sum, r) => sum + Math.pow(r - avgDailyReturn, 2), 0) /
-    dailyReturns.length;
-  const dailyVolatility = Math.sqrt(variance);
-  const annualizedVolatility = dailyVolatility * Math.sqrt(252); // Assuming 252 trading days per year
-
-  // Calculate maximum drawdown
-  let maxDrawdown = 0;
-  let peak = sortedNav[0].nav;
-
-  for (const point of sortedNav) {
-    if (point.nav > peak) {
-      peak = point.nav;
-    }
-
-    const drawdown = (peak - point.nav) / peak;
-    maxDrawdown = Math.max(maxDrawdown, drawdown);
-  }
-
-  // Get official returns from API for comparison
-  const returns = await explorer.calculateNavReturns(symbol, sortedNav);
-  const oneYearReturn = returns.find((r) => r.period === '1Y')?.return || 0;
-
-  // Calculate Sharpe ratio (assuming risk-free rate of 4%)
-  const riskFreeRate = 4; // 4% annual
-  const sharpeRatio =
-    (oneYearReturn - riskFreeRate) / (annualizedVolatility * 100);
-
-  console.log(`Fund: ${symbol}`);
   console.log(
-    `Annualized Volatility: ${(annualizedVolatility * 100).toFixed(2)}%`
+    `Asset allocation of SSISCA fund: ${assetAllocation.length} asset types`
   );
-  console.log(`Maximum Drawdown: ${(maxDrawdown * 100).toFixed(2)}%`);
-  console.log(`1-Year Return: ${oneYearReturn.toFixed(2)}%`);
-  console.log(`Sharpe Ratio: ${sharpeRatio.toFixed(2)}`);
-};
 
-calculateCustomMetrics().catch(console.error);
+  // Get NAV history of a specific fund
+  const navHistory = await fund.details.navReport({ symbol: 'SSISCA' });
+  console.log(`NAV history of SSISCA fund: ${navHistory.length} data points`);
+}
+
+getFundDetails();
 ```
 
-## Implementation Considerations
+#### Filtering Funds
 
-1. **Error Handling:** The implementation includes comprehensive error handling for API failures, invalid responses, and data validation issues.
+```typescript
+import { Vnstock } from 'vnstock-ts';
 
-2. **Rate Limiting:** Consider implementing additional rate limiting strategies if making many concurrent requests to the FMARKET API.
+async function filterFunds() {
+  // Create a Vnstock instance and access fund components
+  const vnstock = new Vnstock();
+  const fund = vnstock.fund();
 
-3. **Caching:** Implement caching mechanisms for frequently accessed data such as fund lists and details to reduce API calls.
+  // Filter funds by symbol
+  const ssiFunds = await fund.filter({ symbol: 'SSI' });
+  console.log(`SSI funds: ${ssiFunds.length}`);
 
-4. **Data Validation:** The implementation should validate all inputs and API responses to ensure data integrity.
+  // Get fund ID from filter result to use with other methods
+  const fundId = ssiFunds[0].id;
 
-5. **Performance Optimization:** For operations like comparing multiple funds or calculating custom metrics, consider implementing parallelized requests to improve performance.
+  // Use fund_id directly with other methods
+  const topHoldings = await fund.topHolding({ fundId });
+  console.log(`Top holdings: ${topHoldings.length} positions`);
+}
 
-6. **Documentation:** Use JSDoc comments for all methods and classes to provide good IDE integration and developer experience.
+filterFunds();
+```
 
-7. **Testing:** Implement comprehensive unit tests for all functionality, including mocking API responses and testing edge cases.
+## Implementation Details
 
-## Related Documentation
+### Data Flow
 
-- [FMARKET Explorer Overview](./index.md)
-- [FMARKET Constants and Configuration](./const.md)
+The Funds Module follows this general data flow:
+
+1. User creates a `Vnstock` instance and accesses the fund component via `vnstock.fund()`
+2. The `Fund` class is initialized with a specific data source (currently only FMARKET is supported)
+3. When the user calls methods like `listing()` or `filter()`, the module makes API requests to the FMARKET API
+4. The API responses are transformed into standardized DataFrame format in Python or array format in TypeScript
+5. For detailed fund information, the `FundDetails` class provides a convenient interface to access data by fund symbol rather than internal fund ID
+
+### Fund Data Structure
+
+The Funds Module provides the following data structures:
+
+1. **Fund Listing**: Basic information about each fund, including:
+
+   - Short name (symbol) and full name
+   - Fund type (bond, balanced, stock)
+   - Fund manager/owner
+   - Management fee
+   - NAV and performance metrics
+
+2. **Top Holdings**: Information about the fund's top securities positions:
+
+   - Stock or bond name
+   - Percentage of total fund assets
+   - Industry/sector
+   - Last update date
+
+3. **Industry Allocation**: Breakdown of fund allocation by industries:
+
+   - Industry/sector name
+   - Percentage of total fund assets
+
+4. **Asset Type Allocation**: Breakdown of fund allocation by asset types:
+
+   - Asset type (cash, bonds, stocks, etc.)
+   - Percentage of total fund assets
+
+5. **NAV Report**: Historical net asset value of the fund:
+   - NAV date
+   - NAV value
+   - Daily change
+   - YTD change
+
+### Data Sources
+
+Currently, the Funds Module only supports the FMARKET data source, which provides comprehensive fund data for the Vietnamese market.
+
+### Error Handling
+
+Error handling in the Funds Module follows these principles:
+
+1. **Input Validation**: Parameters are validated before making API calls
+2. **Graceful Failure**: Failed API calls return informative error messages
+3. **Logging**: Detailed logs provide context for debugging
+4. **Consistent Error Reporting**: Errors follow the same format regardless of source
+
+## Dependencies
+
+### Python Dependencies
+
+- `pandas`: For data manipulation and DataFrame operations
+- `requests`: For HTTP requests to APIs
+- Custom utilities:
+  - `get_headers`: For generating appropriate API request headers
+  - `send_request`: For making API requests with error handling
+  - `convert_unix_to_datetime`: For converting timestamp data
+  - `optimize_execution`: For optimizing API calls with caching
+
+### TypeScript Dependencies
+
+- `axios`: For HTTP requests
+- `dayjs`: For date handling
+- Custom utilities:
+  - `ApiClient`: For making API requests with error handling
+  - `convertUnixToDatetime`: For timestamp conversion
+  - `optimizeExecution`: For optimizing API calls
+
+## Implementation Notes
+
+1. **Single Data Source**: The Funds Module currently only supports FMARKET as a data source, unlike other modules supporting multiple sources
+2. **Nested API Structure**: The API uses both ID-based and symbol-based access through different class structures
+3. **Convenient Aliases**: The `details` property provides symbol-based access which is more user-friendly
+4. **Performance Optimization**: API calls are optimized with caching to reduce redundant requests
+5. **Fund Type Filtering**: Supports filtering by fund type to retrieve only relevant funds
+6. **Comprehensive Fund Information**: Provides full details about fund performance, holdings, and allocations
+7. **Missing Data Handling**: Handles missing data gracefully as not all funds have the same information available
+8. **Timestamp Conversions**: Automatically converts timestamp data to proper date objects
+9. **Type Validation**: Validates fund types and other input parameters before making API calls
+10. **Descriptive Error Messages**: Provides clear error messages for troubleshooting

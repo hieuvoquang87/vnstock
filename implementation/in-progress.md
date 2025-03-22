@@ -8,29 +8,65 @@
 
 ## Current Status vs. Planned Structure
 
-Our documentation currently has significant differences from the planned structure described in `README.md`. While the documentation content for all modules exists, the organization doesn't follow the planned directory structure:
+Our documentation has been reorganized to better match the planned structure described in `README.md`:
 
-### Directory Structure Discrepancies
+### Recent Reorganization (UPDATED)
 
-- ✅ Some directories follow the planned structure (e.g., `explorer/vci/`, `explorer/tcbs/`, `explorer/fmarket/`, `explorer/msn/`, `explorer/misc/`)
-- ❌ Some documentation exists as top-level files instead of in their planned directories
+- ✅ Moved analysis.md to common/analysis.md
+- ✅ Moved charts.md to common/plot/chart_wrapper.md
+- ✅ Moved models.md to core/models/index.md
+- ✅ Reorganized finance_data contents:
+  - finance_data/funds.md → explorer/fmarket/fund.md
+  - finance_data/dcb.md → explorer/misc/dcb.md
+  - finance_data/stock.md → explorer/vci/stock.md
+- ✅ Created empty index.md files for all major directories
+- ✅ Created missing utility documentation files (env.md, ext.md, help.md, launcher.md, upgrade.md)
+- ✅ Created export.md in core/converter
+
+### Directory Structure Status
+
+- ✅ Explorer directories follow the planned structure (explorer/vci/, explorer/tcbs/, explorer/fmarket/, explorer/msn/, explorer/misc/)
+- ✅ Core directories follow the planned structure (core/utils/, core/config/, core/converter/)
+- ✅ Common directories follow the planned structure (common/data/, common/plot/)
+- ✅ Connector directories follow the planned structure (connector/dnse/)
+- ✅ Botbuilder directory follows the planned structure
 
 ## Documentation Status by Section
 
 ### Core Utilities
 
-- [x] Core utilities are documented but not in the planned structure
-- [ ] Need to move documentation to match `core/utils/` structure
+- [x] Core utilities structure is complete
+- [ ] Missing content in the following files:
+  - `core/index.md` (empty file)
+  - `core/utils/index.md` (empty file)
+  - `core/utils/env.md` (empty file)
+  - `core/utils/ext.md` (empty file)
+  - `core/utils/help.md` (empty file)
+  - `core/utils/launcher.md` (empty file)
+  - `core/utils/upgrade.md` (empty file)
 
 ### Core Configuration
 
-- [x] Configuration is documented
-- [ ] Need to organize according to planned structure
+- [x] Core configuration structure is complete
+- [ ] Missing content in:
+  - `core/config/index.md` (empty file)
+
+### Core Converter
+
+- [x] Core converter structure is complete
+- [ ] Missing content in:
+  - `core/converter/index.md` (empty file)
+  - `core/converter/export.md` (empty file)
 
 ### Explorer Data Sources
 
+#### Explorer Main
+
+- [ ] `explorer/index.md` - Created but needs content (empty file)
+
 #### VCI Explorer (Complete)
 
+- [x] `explorer/vci/index.md` - Created but needs content (empty file)
 - [x] `explorer/vci/trading.md`
 - [x] `explorer/vci/analysis.md`
 - [x] `explorer/vci/listing.md`
@@ -39,6 +75,7 @@ Our documentation currently has significant differences from the planned structu
 - [x] `explorer/vci/models.md`
 - [x] `explorer/vci/company.md`
 - [x] `explorer/vci/const.md`
+- [x] `explorer/vci/stock.md` (Added from finance_data)
 
 #### TCBS Explorer (Complete)
 
@@ -56,7 +93,7 @@ Our documentation currently has significant differences from the planned structu
 
 - [x] `explorer/fmarket/index.md` - Created on April 9, 2024
 - [x] `explorer/fmarket/const.md` - Created on April 9, 2024
-- [x] `explorer/fmarket/fund.md` - Created on April 9, 2024
+- [x] `explorer/fmarket/fund.md` - Reorganized from finance_data
 
 #### MSN Explorer (Complete)
 
@@ -67,56 +104,76 @@ Our documentation currently has significant differences from the planned structu
 - [x] `explorer/msn/models.md` - Created on April 15, 2024
 - [x] `explorer/msn/quote.md` - Created on April 15, 2024
 
-#### Misc Explorer (Complete)
+#### Misc Explorer (Updated)
 
 - [x] `explorer/misc/index.md` - Created on April 18, 2024
 - [x] `explorer/misc/exchange_rate.md` - Created on April 18, 2024
 - [x] `explorer/misc/gold_price.md` - Created on April 18, 2024
+- [x] `explorer/misc/dcb.md` - Reorganized from finance_data
 
 ### Common Modules
 
-- [x] Some common modules are documented
-- [ ] Need to organize according to planned structure
+- [x] Common modules structure is now complete
+- [ ] Missing content in:
+  - `common/index.md` (empty file)
 
-### Financial Data
+### Connector Modules
 
-- [x] `finance_data/stock.md`
-- [x] `finance_data/dcb.md`
-- [x] `finance_data/funds.md`
-- [x] `finance_data/basic.md`
+- [x] Connector module structure is complete
+- [ ] Missing content in:
+  - `connector/index.md` (empty file)
+  - `connector/dnse/index.md` (empty file)
 
-### Top-level Module Documentation
+### Botbuilder Modules
 
-- [x] `analysis.md` (should be moved to proper directory)
-- [x] `charts.md` (should be moved to proper directory)
-- [x] `models.md` (should be moved to proper directory)
+- [x] Botbuilder module structure is complete
+- [x] `botbuilder/noti.md`
+- [ ] Missing content in:
+  - `botbuilder/index.md` (empty file)
 
-### Other Modules
+### Models (Reorganized)
 
-- [x] Some documentation exists for other modules
-- [ ] Need to organize according to planned structure
+- [x] `core/models/index.md` (moved from root)
 
 ## Priority Action Items
 
-1. **Organize Existing Documentation**: Move existing documentation files into their proper directory structure to match the plan in README.md
+1. **Add Content to Empty Index Files**:
 
-2. **Create Missing Documentation**:
+   - `explorer/index.md` (empty)
+   - `core/index.md` (empty)
+   - `common/index.md` (empty)
+   - `botbuilder/index.md` (empty)
+   - `connector/index.md` (empty)
+   - `connector/dnse/index.md` (empty)
+   - `core/utils/index.md` (empty)
+   - `core/config/index.md` (empty)
+   - `core/converter/index.md` (empty)
+   - `explorer/vci/index.md` (empty)
 
-   - Complete the empty directories with necessary files
-   - Focus on reorganizing common modules next
+2. **Add Content to Empty Utility Files**:
 
-3. **Directory Structure Alignment**:
+   - `core/utils/env.md` (empty)
+   - `core/utils/ext.md` (empty)
+   - `core/utils/help.md` (empty)
+   - `core/utils/launcher.md` (empty)
+   - `core/utils/upgrade.md` (empty)
+   - `core/converter/export.md` (empty)
 
-   - Create any missing directories
-   - Ensure proper indexing and cross-referencing
+3. **Directory Structure Verification**:
+
+   - Verify cross-references between files are updated with new locations
+   - Check for any other missing files according to the planned structure
 
 4. **Additional Tasks**:
-   - Update references between files when reorganizing
-   - Create index files for each directory
    - Ensure consistency in documentation format
 
 ## Recently Completed
 
+- Created missing utility documentation files: env.md, ext.md, help.md, launcher.md, upgrade.md (TODAY)
+- Created export.md in core/converter (TODAY)
+- Created explorer/vci/index.md (TODAY)
+- Reorganized file structure to match planned documentation layout (TODAY)
+- Created empty index.md files for all major directories (TODAY)
 - `explorer/misc/index.md` - (April 18, 2024)
 - `explorer/misc/exchange_rate.md` - (April 18, 2024)
 - `explorer/misc/gold_price.md` - (April 18, 2024)
@@ -138,29 +195,18 @@ Our documentation currently has significant differences from the planned structu
 
 ## Restructuring Plan
 
-1. **Week 1 (Priority 1)**: Reorganize existing files into proper structure
+1. **Week 1 (Priority 1)**: Add content to empty index files
 
-   - Move top-level files into proper directories
-   - Create necessary index files
-   - Update cross-references
+   - Focus on creating content for the index files for all directories
+   - Ensure proper navigation structure
 
-2. **Week 2 (Priority 2)**: Organize Common Modules
+2. **Week 2 (Priority 2)**: Add content to empty utility files
 
-   - Reorganize common modules into proper directory structure
-   - Ensure proper cross-referencing
+   - Create content for all empty utility files in the core directory
+   - Focus on utilities, configuration, and converter documentation
 
-3. **Week 3 (Priority 3)**: Create missing documentation for remaining modules
+3. **Week 3 (Priority 3)**: Final verification
 
-   - Identify any remaining documentation gaps
-   - Fill in documentation for any undocumented components
-
-4. **Week 4 (Priority 4)**: Complete remaining documentation
-
-   - Fill in any remaining gaps
-   - Perform final verification against planned structure
-   - Update implementation progress tracking
-
-5. **Final Step**: Perform a complete validation
    - Verify all files exist in the correct locations
    - Check for consistency in documentation format
    - Ensure all cross-references are working
