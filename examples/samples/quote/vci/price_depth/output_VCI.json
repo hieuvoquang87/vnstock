@@ -1,0 +1,86 @@
+[
+  {
+    "price": "39550",
+    "acc_volume": "418900",
+    "acc_buy_volume": "397900",
+    "acc_sell_volume": "21000",
+    "acc_undefined_volume": "0"
+  },
+  {
+    "price": "39500",
+    "acc_volume": "2332000",
+    "acc_buy_volume": "1992900",
+    "acc_sell_volume": "339100",
+    "acc_undefined_volume": "0"
+  },
+  {
+    "price": "39450",
+    "acc_volume": "1891600",
+    "acc_buy_volume": "1140400",
+    "acc_sell_volume": "751200",
+    "acc_undefined_volume": "0"
+  },
+  {
+    "price": "39400",
+    "acc_volume": "716200",
+    "acc_buy_volume": "484900",
+    "acc_sell_volume": "231300",
+    "acc_undefined_volume": "0"
+  },
+  {
+    "price": "39350",
+    "acc_volume": "881500",
+    "acc_buy_volume": "576200",
+    "acc_sell_volume": "305300",
+    "acc_undefined_volume": "0"
+  },
+  {
+    "price": "39300",
+    "acc_volume": "555000",
+    "acc_buy_volume": "328900",
+    "acc_sell_volume": "226100",
+    "acc_undefined_volume": "0"
+  },
+  {
+    "price": "39250",
+    "acc_volume": "616300",
+    "acc_buy_volume": "356900",
+    "acc_sell_volume": "259400",
+    "acc_undefined_volume": "0"
+  },
+  {
+    "price": "39200",
+    "acc_volume": "1072600",
+    "acc_buy_volume": "512200",
+    "acc_sell_volume": "560400",
+    "acc_undefined_volume": "0"
+  },
+  {
+    "price": "39150",
+    "acc_volume": "734500",
+    "acc_buy_volume": "109200",
+    "acc_sell_volume": "625300",
+    "acc_undefined_volume": "0"
+  },
+  {
+    "price": "39100",
+    "acc_volume": "3207900",
+    "acc_buy_volume": "49700",
+    "acc_sell_volume": "185900",
+    "acc_undefined_volume": "2972300"
+  },
+  {
+    "price": "39050",
+    "acc_volume": "60100",
+    "acc_buy_volume": "0",
+    "acc_sell_volume": "60100",
+    "acc_undefined_volume": "0"
+  },
+  {
+    "price": "39000",
+    "acc_volume": "330600",
+    "acc_buy_volume": "35100",
+    "acc_sell_volume": "193300",
+    "acc_undefined_volume": "102200"
+  }
+]

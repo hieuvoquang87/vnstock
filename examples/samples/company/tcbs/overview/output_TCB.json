@@ -1,0 +1,22 @@
+[
+  {
+    "symbol": "TCB",
+    "exchange": "HOSE",
+    "industry": "Ngân hàng",
+    "company_type": "NH",
+    "no_shareholders": 1901,
+    "foreign_percent": 0.225,
+    "outstanding_share": 7064.9,
+    "issue_share": 7064.9,
+    "established_year": "1993",
+    "no_employees": 11848,
+    "stock_rating": 3.3,
+    "delta_in_week": 0.005,
+    "delta_in_month": 0.008,
+    "delta_in_year": 0.284,
+    "short_name": "Techcombank",
+    "website": "https://techcombank.com",
+    "industry_id": 289,
+    "industry_id_v2": "8355"
+  }
+]

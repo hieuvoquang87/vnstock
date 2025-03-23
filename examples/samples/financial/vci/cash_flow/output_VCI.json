@@ -1,0 +1,5 @@
+{
+  "error": "'DataFrame' object has no attribute 'dtype'",
+  "error_type": "AttributeError",
+  "traceback": "<traceback object at 0x10c0f7a80>"
+}

@@ -1,0 +1,6 @@
+{
+  "period": "year",
+  "dropna": true,
+  "get_all": true,
+  "show_log": true
+}
