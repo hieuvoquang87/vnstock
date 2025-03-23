@@ -1,0 +1,23 @@
+{
+  "exchange": "HOSE",
+  "shortName": "VINAMILK",
+  "industryID": 218,
+  "industryIDv2": "3577",
+  "industryIdLevel2": "3500",
+  "industryIdLevel4": "3577",
+  "industry": "Thực phẩm và đồ uống",
+  "industryEn": "Food & Beverage",
+  "establishedYear": "2003",
+  "noEmployees": 9960,
+  "noShareholders": 0,
+  "foreignPercent": 0.503,
+  "website": "https://www.vinamilk.com.vn",
+  "stockRating": 2.5,
+  "deltaInWeek": -0.01,
+  "deltaInMonth": -0.012,
+  "deltaInYear": -0.109,
+  "outstandingShare": 2090,
+  "issueShare": 2090,
+  "companyType": "CT",
+  "ticker": "VNM"
+}

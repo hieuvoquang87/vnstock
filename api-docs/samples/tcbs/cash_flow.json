@@ -1,0 +1,222 @@
+[
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2024,
+    "investCost": -1742,
+    "fromInvest": -3739,
+    "fromFinancial": -6641,
+    "fromSale": 9686,
+    "freeCashFlow": 10462
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2023,
+    "investCost": -1580,
+    "fromInvest": -2989,
+    "fromFinancial": -4293,
+    "fromSale": 7887,
+    "freeCashFlow": 11854
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2022,
+    "investCost": -1457,
+    "fromInvest": 3473,
+    "fromFinancial": -12360,
+    "fromSale": 8827,
+    "freeCashFlow": 10114
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2021,
+    "investCost": -1531,
+    "fromInvest": -3933,
+    "fromFinancial": -5257,
+    "fromSale": 9432,
+    "freeCashFlow": 13588
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2020,
+    "investCost": -1265,
+    "fromInvest": -4802,
+    "fromFinancial": -5927,
+    "fromSale": 10180,
+    "freeCashFlow": 14454
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2019,
+    "investCost": -2158,
+    "fromInvest": -6748,
+    "fromFinancial": -3516,
+    "fromSale": 11410,
+    "freeCashFlow": 10951
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2018,
+    "investCost": -3186,
+    "fromInvest": -1045,
+    "fromFinancial": -6535,
+    "fromSale": 8140,
+    "freeCashFlow": 11597
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2017,
+    "investCost": -2673,
+    "fromInvest": -1771,
+    "fromFinancial": -7535,
+    "fromSale": 9602,
+    "freeCashFlow": 10092
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2016,
+    "investCost": -1142,
+    "fromInvest": -1946,
+    "fromFinancial": -7141,
+    "fromSale": 8390,
+    "freeCashFlow": 11079
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2015,
+    "investCost": -1068,
+    "fromInvest": -2127,
+    "fromFinancial": -5704,
+    "fromSale": 7659,
+    "freeCashFlow": 8403
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2014,
+    "investCost": -859,
+    "fromInvest": -3873,
+    "fromFinancial": -2673,
+    "fromSale": 5328,
+    "freeCashFlow": 7511
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2013,
+    "investCost": -1491,
+    "fromInvest": -1590,
+    "fromFinancial": -3168,
+    "fromSale": 6252,
+    "freeCashFlow": 6100
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2012,
+    "investCost": -3134,
+    "fromInvest": -4974,
+    "fromFinancial": -2225,
+    "fromSale": 5295,
+    "freeCashFlow": 4963
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2011,
+    "investCost": -1767,
+    "fromInvest": 6,
+    "fromFinancial": 126,
+    "fromSale": 2411,
+    "freeCashFlow": 3153
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2010,
+    "investCost": -1432,
+    "fromInvest": -643,
+    "fromFinancial": -1188,
+    "fromSale": 2019,
+    "freeCashFlow": 1297
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2009,
+    "investCost": -655,
+    "fromInvest": -2476,
+    "fromFinancial": -533,
+    "fromSale": 3097,
+    "freeCashFlow": 2376
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2008,
+    "investCost": -445,
+    "fromInvest": -532,
+    "fromFinancial": -517,
+    "fromSale": 1270,
+    "freeCashFlow": null
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2007,
+    "investCost": -744,
+    "fromInvest": -1016,
+    "fromFinancial": 663,
+    "fromSale": 313,
+    "freeCashFlow": null
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2006,
+    "investCost": -610,
+    "fromInvest": -589,
+    "fromFinancial": -253,
+    "fromSale": 499,
+    "freeCashFlow": null
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2005,
+    "investCost": -242,
+    "fromInvest": -387,
+    "fromFinancial": -201,
+    "fromSale": 574,
+    "freeCashFlow": null
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2004,
+    "investCost": -173,
+    "fromInvest": -361,
+    "fromFinancial": -95,
+    "fromSale": 126,
+    "freeCashFlow": null
+  },
+  {
+    "ticker": "VNM",
+    "quarter": 5,
+    "year": 2003,
+    "investCost": 0,
+    "fromInvest": 0,
+    "fromFinancial": 0,
+    "fromSale": 0,
+    "freeCashFlow": null
+  }
+]

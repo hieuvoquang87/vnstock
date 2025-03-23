@@ -1,0 +1,124 @@
+{
+  "listDividendPaymentHis": [
+    {
+      "exerciseDate": "26/12/24",
+      "cashYear": 2024,
+      "cashDividendPercentage": 0.05,
+      "issueMethod": "cash",
+      "no": 1,
+      "ticker": "VNM"
+    },
+    {
+      "exerciseDate": "24/09/24",
+      "cashYear": 2023,
+      "cashDividendPercentage": 0.095,
+      "issueMethod": "cash",
+      "no": 2,
+      "ticker": "VNM"
+    },
+    {
+      "exerciseDate": "24/09/24",
+      "cashYear": 2024,
+      "cashDividendPercentage": 0.15,
+      "issueMethod": "cash",
+      "no": 3,
+      "ticker": "VNM"
+    },
+    {
+      "exerciseDate": "15/03/24",
+      "cashYear": 2023,
+      "cashDividendPercentage": 0.09,
+      "issueMethod": "cash",
+      "no": 4,
+      "ticker": "VNM"
+    },
+    {
+      "exerciseDate": "27/12/23",
+      "cashYear": 2023,
+      "cashDividendPercentage": 0.05,
+      "issueMethod": "cash",
+      "no": 5,
+      "ticker": "VNM"
+    },
+    {
+      "exerciseDate": "03/08/23",
+      "cashYear": 2022,
+      "cashDividendPercentage": 0.095,
+      "issueMethod": "cash",
+      "no": 6,
+      "ticker": "VNM"
+    },
+    {
+      "exerciseDate": "03/08/23",
+      "cashYear": 2023,
+      "cashDividendPercentage": 0.15,
+      "issueMethod": "cash",
+      "no": 7,
+      "ticker": "VNM"
+    },
+    {
+      "exerciseDate": "22/12/22",
+      "cashYear": 2022,
+      "cashDividendPercentage": 0.14,
+      "issueMethod": "cash",
+      "no": 8,
+      "ticker": "VNM"
+    },
+    {
+      "exerciseDate": "06/07/22",
+      "cashYear": 2021,
+      "cashDividendPercentage": 0.095,
+      "issueMethod": "cash",
+      "no": 9,
+      "ticker": "VNM"
+    },
+    {
+      "exerciseDate": "06/07/22",
+      "cashYear": 2022,
+      "cashDividendPercentage": 0.15,
+      "issueMethod": "cash",
+      "no": 10,
+      "ticker": "VNM"
+    },
+    {
+      "exerciseDate": "10/01/22",
+      "cashYear": 2021,
+      "cashDividendPercentage": 0.14,
+      "issueMethod": "cash",
+      "no": 11,
+      "ticker": "VNM"
+    },
+    {
+      "exerciseDate": "07/09/21",
+      "cashYear": 2021,
+      "cashDividendPercentage": 0.15,
+      "issueMethod": "cash",
+      "no": 12,
+      "ticker": "VNM"
+    },
+    {
+      "exerciseDate": "07/06/21",
+      "cashYear": 2020,
+      "cashDividendPercentage": 0.11,
+      "issueMethod": "cash",
+      "no": 13,
+      "ticker": "VNM"
+    },
+    {
+      "exerciseDate": "05/01/21",
+      "cashYear": 2020,
+      "cashDividendPercentage": 0.1,
+      "issueMethod": "cash",
+      "no": 14,
+      "ticker": "VNM"
+    },
+    {
+      "exerciseDate": "29/09/20",
+      "cashYear": 2020,
+      "cashDividendPercentage": 0.2,
+      "issueMethod": "cash",
+      "no": 15,
+      "ticker": "VNM"
+    }
+  ]
+}

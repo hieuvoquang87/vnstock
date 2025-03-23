@@ -1,0 +1,144 @@
+{
+  "listKeyOfficer": [
+    {
+      "no": 1,
+      "ticker": "VNM",
+      "name": "Mai Kiều Liên",
+      "position": "Thành viên Hội đồng Quản trị",
+      "ownPercent": 0.0031
+    },
+    {
+      "no": 2,
+      "ticker": "VNM",
+      "name": "Mai Kiều Liên",
+      "position": "Tổng Giám đốc",
+      "ownPercent": 0.0031
+    },
+    {
+      "no": 3,
+      "ticker": "VNM",
+      "name": "Mai Kiều Liên",
+      "position": "Phụ trách Công bố thông tin",
+      "ownPercent": 0.0031
+    },
+    {
+      "no": 4,
+      "ticker": "VNM",
+      "name": "Nguyễn Thị Thanh Hòa",
+      "position": "Giám đốc điều hành sản xuất",
+      "ownPercent": 0.0005
+    },
+    {
+      "no": 5,
+      "ticker": "VNM",
+      "name": "Trần Minh Văn",
+      "position": null,
+      "ownPercent": 0.0004
+    },
+    {
+      "no": 6,
+      "ticker": "VNM",
+      "name": "Lê Thị Ngọc Thuý",
+      "position": null,
+      "ownPercent": 0.0003
+    },
+    {
+      "no": 7,
+      "ticker": "VNM",
+      "name": "Mai Hoài Anh",
+      "position": "Giám đốc khối",
+      "ownPercent": 0.0002
+    },
+    {
+      "no": 8,
+      "ticker": "VNM",
+      "name": "Lê Thành Liêm",
+      "position": "Thành viên Hội đồng Quản trị",
+      "ownPercent": 0.0002
+    },
+    {
+      "no": 9,
+      "ticker": "VNM",
+      "name": "Lê Thành Liêm",
+      "position": "Giám đốc khối",
+      "ownPercent": 0.0002
+    },
+    {
+      "no": 10,
+      "ticker": "VNM",
+      "name": "Lê Thành Liêm",
+      "position": "Giám đốc Tài chính",
+      "ownPercent": 0.0002
+    },
+    {
+      "no": 11,
+      "ticker": "VNM",
+      "name": "Nguyễn Thị Như Hằng",
+      "position": null,
+      "ownPercent": 0.0002
+    },
+    {
+      "no": 12,
+      "ticker": "VNM",
+      "name": "Dương Thị Ngọc Trinh",
+      "position": null,
+      "ownPercent": 0.0001
+    },
+    {
+      "no": 13,
+      "ticker": "VNM",
+      "name": "Nguyễn Minh Ân",
+      "position": null,
+      "ownPercent": 0.0001
+    },
+    {
+      "no": 14,
+      "ticker": "VNM",
+      "name": "Trịnh Quốc Dũng",
+      "position": "Giám đốc",
+      "ownPercent": 0.0001
+    },
+    {
+      "no": 15,
+      "ticker": "VNM",
+      "name": "Trịnh Quốc Dũng",
+      "position": "Giám đốc điều hành Phát triển vùng nguyên vật liệu",
+      "ownPercent": 0.0001
+    },
+    {
+      "no": 16,
+      "ticker": "VNM",
+      "name": "Lê Quang Thanh Trúc",
+      "position": null,
+      "ownPercent": 0.0001
+    },
+    {
+      "no": 17,
+      "ticker": "VNM",
+      "name": "Nguyễn Hữu Ngọc Trân",
+      "position": null,
+      "ownPercent": 0.0002
+    },
+    {
+      "no": 18,
+      "ticker": "VNM",
+      "name": "Bùi Thị Hương",
+      "position": "Giám đốc Điều hành Nhân sự - Hành chính",
+      "ownPercent": 0.0001
+    },
+    {
+      "no": 19,
+      "ticker": "VNM",
+      "name": "Phan Minh Tiên",
+      "position": null,
+      "ownPercent": 0.0001
+    },
+    {
+      "no": 20,
+      "ticker": "VNM",
+      "name": "Phạm Phú Tuấn",
+      "position": null,
+      "ownPercent": 0.0001
+    }
+  ]
+}

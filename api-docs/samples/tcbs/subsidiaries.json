@@ -1,0 +1,148 @@
+{
+  "listSubCompany": [
+    {
+      "no": 1,
+      "ticker": "VNM",
+      "companyName": "Angkor Dairy Products Co., Ltd",
+      "ownPercent": 1
+    },
+    {
+      "no": 2,
+      "ticker": "VNM",
+      "companyName": "Công ty TNHH MTV Bò Sữa Thống Nhất Thanh Hóa",
+      "ownPercent": 1
+    },
+    {
+      "no": 3,
+      "ticker": "VNM",
+      "companyName": "Công ty TNHH MTV Bò Sữa Việt Nam",
+      "ownPercent": 1
+    },
+    {
+      "no": 4,
+      "ticker": "VNM",
+      "companyName": "Driftwood Dairy Holdings Corporation",
+      "ownPercent": 1
+    },
+    {
+      "no": 5,
+      "ticker": "VNM",
+      "companyName": "Vinamilk Europe Spóstka Z Ograniczona",
+      "ownPercent": 1
+    },
+    {
+      "no": 6,
+      "ticker": "VNM",
+      "companyName": "Lao-jagro Development Xiengkhouang Co.,ltd",
+      "ownPercent": 0.873
+    },
+    {
+      "no": 7,
+      "ticker": "VNM",
+      "companyName": "Công ty Cổ phần GTNfoods",
+      "ownPercent": 0.75
+    },
+    {
+      "no": 8,
+      "ticker": "VNM",
+      "companyName": "Tổng Công ty Chăn nuôi Việt Nam - Công ty Cổ phần",
+      "ownPercent": 0.689
+    },
+    {
+      "no": 9,
+      "ticker": "VNM",
+      "companyName": "Công ty Cổ phần Đường Việt Nam",
+      "ownPercent": 0.65
+    },
+    {
+      "no": 10,
+      "ticker": "VNM",
+      "companyName": "Công ty TNHH Liên Doanh Thực Phẩm Và Đồ Uống Vibev",
+      "ownPercent": 0.51
+    },
+    {
+      "no": 11,
+      "ticker": "VNM",
+      "companyName": "Công ty CP Chế Biến Dừa Á Châu",
+      "ownPercent": 0.25
+    },
+    {
+      "no": 12,
+      "ticker": "VNM",
+      "companyName": "Công Ty Cổ Phần Apis",
+      "ownPercent": 0.2
+    },
+    {
+      "no": 13,
+      "ticker": "VNM",
+      "companyName": "Công Ty Cổ Phần Nguyên Liệu Thực Phẩm Á Châu Sài Gòn",
+      "ownPercent": 0.147
+    },
+    {
+      "no": 14,
+      "ticker": "VNM",
+      "companyName": "Miraka Holding Limited",
+      "ownPercent": 0.136
+    },
+    {
+      "no": 15,
+      "ticker": "VNM",
+      "companyName": "Miraka Limited",
+      "ownPercent": 0.136
+    },
+    {
+      "no": 16,
+      "ticker": "VNM",
+      "companyName": "Công ty Cổ phần Giống bò sữa Mộc Châu",
+      "ownPercent": 0.089
+    },
+    {
+      "no": 17,
+      "ticker": "VNM",
+      "companyName": "Công ty Cổ Phần Bao Bì Dầu Thực Vật",
+      "ownPercent": 0.049
+    },
+    {
+      "no": 18,
+      "ticker": "VNM",
+      "companyName": "Công ty Cổ phần Thành Thành Công - Biên Hòa",
+      "ownPercent": 0.048
+    },
+    {
+      "no": 19,
+      "ticker": "VNM",
+      "companyName": "Ngân hàng Thương mại Cổ phần Bảo Việt",
+      "ownPercent": 0.04
+    },
+    {
+      "no": 20,
+      "ticker": "VNM",
+      "companyName": "Công ty Cổ phần Hàng tiêu dùng Biên Hòa",
+      "ownPercent": 0.015
+    },
+    {
+      "no": 21,
+      "ticker": "VNM",
+      "companyName": "Công ty Cổ phần Searefico",
+      "ownPercent": 0.004
+    },
+    {
+      "no": 22,
+      "ticker": "VNM",
+      "companyName": "Công ty Cổ phần Cấp nước Thủ Đức",
+      "ownPercent": 0
+    },
+    {
+      "no": 23,
+      "ticker": "VNM",
+      "companyName": "Công ty Cổ phần Sữa Lam Sơn",
+      "ownPercent": 0
+    },
+    {
+      "no": 24,
+      "ticker": "VNM",
+      "companyName": "Del Monte - Vinamilk Dairy Inc., Philippines",
+      "ownPercent": 0
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+{
+  "listInsiderDealing": [
+    {
+      "no": 1,
+      "ticker": "VNM",
+      "anDate": "20/03/25",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 61800,
+      "ratio": -0.008
+    },
+    {
+      "no": 2,
+      "ticker": "VNM",
+      "anDate": "13/03/25",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 62000,
+      "ratio": -0.011
+    },
+    {
+      "no": 3,
+      "ticker": "VNM",
+      "anDate": "17/02/25",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 60000,
+      "ratio": 0.022
+    },
+    {
+      "no": 4,
+      "ticker": "VNM",
+      "anDate": "06/02/25",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 60700,
+      "ratio": 0.01
+    },
+    {
+      "no": 5,
+      "ticker": "VNM",
+      "anDate": "14/01/25",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 61600,
+      "ratio": -0.005
+    },
+    {
+      "no": 6,
+      "ticker": "VNM",
+      "anDate": "31/12/24",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 63400,
+      "ratio": -0.033
+    },
+    {
+      "no": 7,
+      "ticker": "VNM",
+      "anDate": "11/12/24",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 63699,
+      "ratio": -0.038
+    },
+    {
+      "no": 8,
+      "ticker": "VNM",
+      "anDate": "26/11/24",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 64295,
+      "ratio": -0.047
+    },
+    {
+      "no": 9,
+      "ticker": "VNM",
+      "anDate": "07/11/24",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 65386,
+      "ratio": -0.062
+    },
+    {
+      "no": 10,
+      "ticker": "VNM",
+      "anDate": "22/10/24",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 66775,
+      "ratio": -0.082
+    },
+    {
+      "no": 11,
+      "ticker": "VNM",
+      "anDate": "04/10/24",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 67966,
+      "ratio": -0.098
+    },
+    {
+      "no": 12,
+      "ticker": "VNM",
+      "anDate": "17/09/24",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 70380,
+      "ratio": -0.129
+    },
+    {
+      "no": 13,
+      "ticker": "VNM",
+      "anDate": "30/08/24",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 70860,
+      "ratio": -0.135
+    },
+    {
+      "no": 14,
+      "ticker": "VNM",
+      "anDate": "13/08/24",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 70764,
+      "ratio": -0.134
+    },
+    {
+      "no": 15,
+      "ticker": "VNM",
+      "anDate": "30/07/24",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 64915,
+      "ratio": -0.056
+    },
+    {
+      "no": 16,
+      "ticker": "VNM",
+      "anDate": "09/07/24",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 64723,
+      "ratio": -0.053
+    },
+    {
+      "no": 17,
+      "ticker": "VNM",
+      "anDate": "26/06/24",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 62518,
+      "ratio": -0.019
+    },
+    {
+      "no": 18,
+      "ticker": "VNM",
+      "anDate": "19/06/24",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 950000,
+      "price": 62614,
+      "ratio": -0.021
+    },
+    {
+      "no": 19,
+      "ticker": "VNM",
+      "anDate": "04/06/24",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 63285,
+      "ratio": -0.031
+    },
+    {
+      "no": 20,
+      "ticker": "VNM",
+      "anDate": "23/05/24",
+      "dealingMethod": 1,
+      "dealingAction": "0",
+      "quantity": 0,
+      "price": 64244,
+      "ratio": -0.046
+    }
+  ]
+}

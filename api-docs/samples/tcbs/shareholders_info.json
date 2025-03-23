@@ -1,0 +1,64 @@
+{
+  "listShareHolder": [
+    {
+      "no": 1,
+      "ticker": "SCIC",
+      "name": "Tổng Công ty Đầu Tư Và Kinh Doanh Vốn Nhà Nước - Công ty TNHH",
+      "ownPercent": 0.36
+    },
+    {
+      "no": 2,
+      "ticker": "F&NDI",
+      "name": "F&N Dairy Investments Private Limited",
+      "ownPercent": 0.1769
+    },
+    {
+      "no": 3,
+      "ticker": "PVPL",
+      "name": "Platinum Victory Private Limited",
+      "ownPercent": 0.1062
+    },
+    {
+      "no": 4,
+      "ticker": "VNM",
+      "name": "Mai Kiều Liên",
+      "ownPercent": 0.0031
+    },
+    {
+      "no": 5,
+      "ticker": "VNM",
+      "name": "Nguyễn Thị Thanh Hòa",
+      "ownPercent": 0.0005
+    },
+    {
+      "no": 6,
+      "ticker": "VNM",
+      "name": "Trần Minh Văn",
+      "ownPercent": 0.0004
+    },
+    {
+      "no": 7,
+      "ticker": "VNM",
+      "name": "Lê Thị Ngọc Thuý",
+      "ownPercent": 0.0003
+    },
+    {
+      "no": 8,
+      "ticker": "VNM",
+      "name": "Mai Hoài Anh",
+      "ownPercent": 0.0002
+    },
+    {
+      "no": 9,
+      "ticker": "VNM",
+      "name": "Lê Thành Liêm",
+      "ownPercent": 0.0002
+    },
+    {
+      "no": 10,
+      "ticker": "VNM",
+      "name": "Khác",
+      "ownPercent": 0.1474
+    }
+  ]
+}
